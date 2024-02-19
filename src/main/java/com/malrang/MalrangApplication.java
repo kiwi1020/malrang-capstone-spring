@@ -16,7 +16,6 @@ public class MalrangApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MalrangApplication.class, args);
-        System.out.println("test");
     }
     @Bean
     public RestTemplate restTemplate(){

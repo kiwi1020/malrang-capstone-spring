@@ -1,10 +1,7 @@
 package com.malrang.service;
 
 import com.malrang.configuration.ChatGptConfig;
-import com.malrang.dto.ChatGptMessage;
-import com.malrang.dto.ChatGptRequest;
-import com.malrang.dto.ChatGptResponse;
-import com.malrang.dto.QuestionRequest;
+import com.malrang.dto.GptDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,14 +23,14 @@ public class ChatGptService {
     private final RestTemplate restTemplate;
     @Value("${api-key.chat-gpt}")
     private String apiKey;
-    public HttpEntity<ChatGptRequest> buildHttpEntity(ChatGptRequest chatGptRequest){
+    public HttpEntity<GptDto.ChatGptRequest> buildHttpEntity(GptDto.ChatGptRequest chatGptRequest){
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.parseMediaType(ChatGptConfig.MEDIA_TYPE));
         httpHeaders.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.BEARER + apiKey);
         return new HttpEntity<>(chatGptRequest, httpHeaders);
     }
 
-    public ChatGptResponse getResponse(HttpEntity<ChatGptRequest> chatGptRequestHttpEntity){
+    public GptDto.ChatGptResponse getResponse(HttpEntity<GptDto.ChatGptRequest> chatGptRequestHttpEntity){
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(60000);
@@ -41,22 +38,22 @@ public class ChatGptService {
         requestFactory.setReadTimeout(60 * 1000);   //  1min = 60 sec * 1,000ms
         restTemplate.setRequestFactory(requestFactory);
 
-        ResponseEntity<ChatGptResponse> responseEntity = restTemplate.postForEntity(
+        ResponseEntity<GptDto.ChatGptResponse> responseEntity = restTemplate.postForEntity(
                 ChatGptConfig.CHAT_URL,
                 chatGptRequestHttpEntity,
-                ChatGptResponse.class);
+                GptDto.ChatGptResponse.class);
 
         return responseEntity.getBody();
     }
-    public ChatGptResponse askQuestion(QuestionRequest questionRequest){
-        List<ChatGptMessage> messages = new ArrayList<>();
-        messages.add(ChatGptMessage.builder()
+    public GptDto.ChatGptResponse askQuestion(GptDto.QuestionRequest questionRequest){
+        List<GptDto.ChatGptMessage> messages = new ArrayList<>();
+        messages.add(GptDto.ChatGptMessage.builder()
                 .role(ChatGptConfig.ROLE)
                 .content(questionRequest.getQuestion())
                 .build());
         return this.getResponse(
                 this.buildHttpEntity(
-                        new ChatGptRequest(
+                        new GptDto.ChatGptRequest(
                                 ChatGptConfig.CHAT_MODEL,
                                 ChatGptConfig.MAX_TOKEN,
                                 ChatGptConfig.TEMPERATURE,
