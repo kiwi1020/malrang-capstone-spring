@@ -2,6 +2,7 @@ package com.malrang.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -13,15 +14,21 @@ public class ChatDto {
     @Getter
     public static class ChatRoom {
         private String roomId;
-        private String name;
+        private String roomName;
         private Set<WebSocketSession> sessions = new HashSet<>();
 
         @Builder
-        public ChatRoom(String roomId, String name) {
+        public ChatRoom(String roomId, String roomName) {
             this.roomId = roomId;
-            this.name = name;
+            this.roomName = roomName;
         }
     }
+    @Getter
+    @NoArgsConstructor
+    public static class CreateRoom {
+        String roomName;
+    }
+
 
     @Getter
     @Setter

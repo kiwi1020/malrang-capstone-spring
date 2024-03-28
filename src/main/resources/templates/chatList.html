@@ -1,22 +1,129 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malrang Malrang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        #userInfo, #roomName {
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        td {
+            text-align: left;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            color: #007bff;
+        }
+
+        .room-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .room-name {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body>
+<body onload="userInfo()">
+<div class="container">
+    <h1>Welcome to Malrang Malrang</h1>
+    <div id="userInfo">
+        <!-- 사용자 정보 입력란 -->
+    </div>
     <input id="roomName" type="text" name="name" placeholder="채팅방 이름">
-    <button onclick=createRoom() >방 만들기</button>
+    <button onclick="createRoom()">방 만들기</button>
 
-
-<table>
-    <tr th:each="room : ${roomList}" >
-        <td>
-            <a th:href="@{chatRoom(roomId=${room.roomId} )}"
-               th:text="${room.name}"></a>
-        </td>
-    </tr>
-</table>
+    <table>
+        <thead>
+        <tr>
+            <th>채팅방</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${roomList}" >
+            <td>
+                <div class="room-info">
+                    <div class="room-info">
+                        <a th:href="@{chatRoom(roomId=${room.roomId} )}"
+                           th:text="${room.roomName}"></a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <script src="/js/article.js"></script>
 </body>
 </html>
