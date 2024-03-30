@@ -156,10 +156,10 @@ function httpRequest(method, url, body, success, fail) {
     });
 }
 
-function translateMessage(message) {
+function translateMessage(message, roomId) {
     body = JSON.stringify({
         question: message +
-            "란 문장이 문법적으로 옳은지 한국어로 설명해주고 만약 올바르지 않다면 교정해줘."
+            "란 문장이 영어 문법적으로 옳은지 한국어로 설명해주고 만약 올바르지 않다면 교정해줘."
     })
     fetch('/chat-gpt/question', {
         method: 'POST',
@@ -175,9 +175,11 @@ function translateMessage(message) {
 
         let messageArea = document.querySelector('.msgArea');
         let translatedMessageElement = document.createElement('div');
+        let transMsg = {"type": "TALK", "roomId": roomId, "sender": 'GPT', "msg": json.answer}
 
-        translatedMessageElement.innerText = json.answer;
-        messageArea.appendChild(translatedMessageElement);
+        //translatedMessageElement.innerText = json.answer;
+        socket.send(JSON.stringify(transMsg));
+        //messageArea.appendChild(translatedMessageElement);
         alert('번역 완료했습니다.');
     })
         .catch(error => {
