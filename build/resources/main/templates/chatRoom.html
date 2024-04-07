@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -23,7 +23,7 @@
             border-radius: 8px;
             padding: 10px;
             margin-top: 20px;
-            max-height: 600px;
+            max-height: 400px;
             overflow-y: auto;
         }
         .msgArea div {
@@ -68,9 +68,9 @@
         }
     </style>
 </head>
-<body onload="userInfo()">
+<body>
 <div class="container">
-    <div id="userInfo" style="display: none;">User Name</div>
+    <div id="user_name" style="display: none;">User Name</div>
     <div>
         <h2>채팅방</h2>
         <div class="msgArea"></div>
@@ -83,15 +83,18 @@
 </div>
 
 <script src="/js/article.js"></script>
-<script th:inline="javascript">
+<script>
     // WebSocket 연결을 위한 변수
     let socket = new WebSocket("ws://localhost:8080/ws/chat");
+    let urlParams = new URLSearchParams(window.location.search);
 
     // WebSocket 연결이 열렸을 때 실행되는 함수
     socket.onopen = function (e) {
         console.log('서버와 연결되었습니다.');
         // 채팅방 입장 메시지를 전송합니다.
-        enterRoom(socket);
+        userInfo(() => {
+            enterRoom(socket);
+        });
     };
 
     // WebSocket 연결이 닫혔을 때 실행되는 함수
@@ -117,7 +120,7 @@
         } else if (data.type === "TALK") {
             // 본인의 메시지와 타인의 메시지를 구분하여 스타일을 추가합니다.
             newMsg.innerText = data.sender + ': ' + data.msg;
-            if (data.sender === document.getElementById('userInfo').innerText) {
+            if (data.sender === document.getElementById('user_name').innerText) {
                 newMsg.classList.add('ownMessage');
             } else {
                 newMsg.classList.add('otherMessage');
@@ -128,17 +131,17 @@
 
     // 채팅방 입장 함수
     function enterRoom(socket) {
-        let userName = document.getElementById('userInfo').innerText;
-        let enterMsg = {"type": "ENTER", "roomId": [[${room.roomId}]], "sender": userName, "msg": ""};
+        let userName = document.getElementById('user_name').innerText;
+        let enterMsg = {"type": "ENTER", "roomId": urlParams.get('roomId') , "sender": userName, "msg": ""};
         // JSON 형태로 메시지를 전송합니다.
         socket.send(JSON.stringify(enterMsg));
     }
 
     // 메시지 전송 함수
     function sendMsg() {
-        let userName = document.getElementById('userInfo').innerText;
+        let userName = document.getElementById('user_name').innerText;
         let content = document.querySelector('.content').value;
-        let talkMsg = {"type": "TALK", "roomId": [[${room.roomId}]], "sender": userName, "msg": content};
+        let talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": content};
         // JSON 형태로 메시지를 전송합니다.
         socket.send(JSON.stringify(talkMsg));
 
@@ -146,15 +149,15 @@
         let translationButton = document.createElement('button');
         translationButton.innerText = '교정';
         translationButton.onclick = function () {
-            translateMessage(content, [[${room.roomId}]]);
+            translateMessage(content, urlParams.get('roomId'));
         }
         messageArea.insertAdjacentElement('beforeend', translationButton); // 'beforeend' 위치에 버튼을 추가합니다.
     }
 
     // 채팅방 나가기 함수
     function quit() {
-        let userName = document.getElementById('userInfo').innerText;
-        let quitMsg = {"type": "QUIT", "roomId": [[${room.roomId}]], "sender": userName, "msg": ""};
+        let userName = document.getElementById('user_name').innerText;
+        let quitMsg = {"type": "QUIT", "roomId": urlParams.get('roomId'), "sender": userName, "msg": ""};
         // JSON 형태로 메시지를 전송하고 연결을 종료합니다.
         socket.send(JSON.stringify(quitMsg));
         socket.close();

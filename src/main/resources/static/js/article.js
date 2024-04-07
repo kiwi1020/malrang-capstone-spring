@@ -114,21 +114,24 @@ function getCookie(key) {
 }
 
 // HTTP 요청을 보내는 함수
-function httpRequest(method, url, body, success, fail) {
-    fetch(url, {
-        method: method,
-        headers: { // 로컬 스토리지에서 액세스 토큰 값을 가져와 헤더에 추가
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-            'Content-Type': 'application/json',
-        },
-        body: body,
-    }).then(response => {
+async function httpRequest(method, url, body, success, fail) {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+
         if (response.status === 200 || response.status === 201) {
-            return response.json();
-        }
-        const refresh_token = getCookie('refresh_token');
-        if (response.status === 401 && refresh_token) {
-            fetch('/api/token', {
+            // 응답이 비어 있는지 확인
+            const text = await response.text();
+            const json = text ? JSON.parse(text) : null;
+            success(json);
+        } else if (response.status === 401 && getCookie('refresh_token')) {
+            const res = await fetch('/api/token', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
@@ -137,29 +140,27 @@ function httpRequest(method, url, body, success, fail) {
                 body: JSON.stringify({
                     refreshToken: getCookie('refresh_token'),
                 }),
-            })
-                .then(res => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-                })
-                .then(result => { // 재발급이 성공하면 로컬 스토리지값을 새로운 액세스 토큰으로 교체
-                    localStorage.setItem('access_token', result.accessToken);
-                    httpRequest(method, url, body, success, fail);
-                })
-                .catch(error => fail());
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+                localStorage.setItem('access_token', result.accessToken);
+                await httpRequest(method, url, body, success, fail);
+            } else {
+                throw new Error('Failed to refresh token');
+            }
         } else {
-            return fail();
+            fail();
         }
-    }).then((json) => {
-        success(json)
-    });
+    } catch (error) {
+        console.error('Error in httpRequest:', error);
+    }
 }
 
 function translateMessage(message, roomId) {
     body = JSON.stringify({
         question: message +
-            "란 문장이 영어 문법적으로 옳은지 한국어로 설명해주고 만약 올바르지 않다면 교정해줘."
+            "란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 교정해줘."
     })
     fetch('/chat-gpt/question', {
         method: 'POST',
@@ -192,14 +193,66 @@ function translateMessage(message, roomId) {
 function userInfo(callback) {
     // 성공 및 실패 시 실행할 콜백 함수 정의
     function success(json) {
-        document.getElementById('userInfo').innerText = json.userName;
+        let userNameElement = document.getElementById('user_name');
+        let userEmailElement = document.getElementById('user_email');
+        let userLanguageElement = document.getElementById('user_language');
+        let userLanguageLevelElement = document.getElementById('user_language_level');
+
+        if (userNameElement)
+            userNameElement.innerText = json.userName;
+
+        if (userEmailElement)
+            userEmailElement.innerText = json.userEmail;
+
+        if (userLanguageElement)
+            userLanguageElement.innerText = json.userLanguages;
+
+        if (userLanguageLevelElement)
+            userLanguageLevelElement.innerText = json.userLanguageLevel;
+
+        if (userNameElement)
+            userNameElement.innerText = json.userName;
+
         console.log(json.userName + '사용자 정보를 가져오는데 성공했습니다.');
+
+        if (callback) {
+            callback();
+        }
     };
 
     function fail() {
         console.error('사용자 정보를 가져오는데 실패했습니다.');
         alert('사용자 정보를 가져오는데 실패했습니다.');
+        window.location.href = "/login";
     };
     // HTTP 요청 보내기
     httpRequest('POST', '/userInfo', null, success, fail);
+}
+
+function updateUserInfo() {
+
+    let email = document.getElementById('user_email').innerText;
+    let nickname = document.getElementById('user_name').innerText;
+    let language = document.getElementById('language').value;
+    let language_level = document.getElementById('language_level').value;
+    // 요청 본문 데이터 설정
+    let body = JSON.stringify({
+        email: email,
+        nickname: nickname,
+        language: language,
+        languageLevel: language_level
+    });
+    // 성공 및 실패 시 실행할 콜백 함수 정의
+    function success() {
+        console.log('프로필 변경에 성공했습니다.');
+        alert('프로필 변경에 성공했습니다.');
+        location.replace('/chat/chatList');
+    };
+
+    function fail() {
+        console.error('프로필 변경에 실패했습니다.');
+        alert('프로필 변경에 실패했습니다.');
+    };
+    // HTTP 요청 보내기
+   httpRequest('POST', '/userInfo/update', body, success, fail);
 }

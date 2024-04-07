@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class UserDto {
-    @Setter
     @Getter
-    public class AddUserRequest {
+    public static class UpdateUserRequest {
         private String email;
-        private String password;
+        private String nickname;
+        private String language;
+        private String languageLevel;
     }
 }

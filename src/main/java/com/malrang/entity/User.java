@@ -1,10 +1,8 @@
 package com.malrang.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +13,7 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Entity
 public class User implements UserDetails {
 
@@ -32,11 +31,19 @@ public class User implements UserDetails {
     @Column(name = "nickname", unique = true)
     private String nickname;
 
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "languageLevel")
+    private String languageLevel;
+
     @Builder
-    public User(String email, String password, String nickname) {
+    public User(String email, String password, String nickname, String language, String languageLevel) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.language = language;
+        this.languageLevel = languageLevel;
     }
 
     public User update(String nickname) {

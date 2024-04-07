@@ -33,6 +33,7 @@ public class WebOAuthSecurityConfig {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
+
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
@@ -54,14 +55,16 @@ public class WebOAuthSecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/token").permitAll()
-                .requestMatchers("/api/**").authenticated()
-                .anyRequest().permitAll());
+                        .requestMatchers("/api/token").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/chat/createRoom").authenticated()
+                        .requestMatchers("/userInfo").authenticated()
+                        .anyRequest().permitAll());
 
         http.oauth2Login((oauth2) -> oauth2
                 .loginPage("/login")
                 .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint
-                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())));
+                        .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())));
 
         http.oauth2Login(oauth2 -> oauth2
                 .successHandler(oAuth2SuccessHandler())
@@ -69,7 +72,10 @@ public class WebOAuthSecurityConfig {
                         .userService(oAuth2UserCustomService)));
 
         http.logout(logout -> logout
-                .logoutSuccessUrl("/login"));
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("refresh_token"));
 
 
         http.exceptionHandling(exceptionHandling -> exceptionHandling

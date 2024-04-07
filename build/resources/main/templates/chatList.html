@@ -93,15 +93,30 @@
             margin-left: 10px;
             font-weight: bold;
         }
+
+        .profile-link {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .logout_link {
+            position: absolute;
+            top: 10px;
+            right: 100px;
+        }
+
     </style>
 </head>
 <body onload="userInfo()">
 <div class="container">
     <h1>Welcome to Malrang Malrang</h1>
     <!--<div><a href="/logout">로그아웃</a></div>-->
-    <div id="userInfo">
+    <div id="user_name">
         <!-- 사용자 정보 입력란 -->
     </div>
+    <a href="/profile" class="profile-link">프로필 설정</a>
+    <a href="/logout" class="logout_link">로그아웃</a>
     <input id="roomName" type="text" name="name" placeholder="채팅방 이름">
     <button onclick="createRoom()">방 만들기</button>
 
@@ -112,13 +127,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="room : ${roomList}" >
+        <tr th:each="room : ${roomList}">
             <td>
+                <!-- 채팅방 목록 클릭 시 goToChatRoom() 함수 호출 -->
                 <div class="room-info">
-                    <div class="room-info">
-                        <a th:href="@{chatRoom(roomId=${room.roomId} )}"
-                           th:text="${room.roomName}"></a>
-                    </div>
+                    <a th:href="@{'/chat/chatRoom?roomId=' + ${room.roomId}}"
+                       th:text="${room.roomName}"></a>
                 </div>
             </td>
         </tr>
