@@ -116,7 +116,7 @@
         <!-- 사용자 정보 입력란 -->
     </div>
     <a href="/profile" class="profile-link">프로필 설정</a>
-    <a href="/logout" class="logout_link">로그아웃</a>
+    <a href="/logout" class="logout_link" onclick="localStorage.removeItem('access_token')">로그아웃</a>
     <input id="roomName" type="text" name="name" placeholder="채팅방 이름">
     <button onclick="createRoom()">방 만들기</button>
 

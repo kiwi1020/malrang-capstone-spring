@@ -42,6 +42,11 @@
             border-radius: 10px;
             padding: 8px;
         }
+        .gptMessage {
+            background-color: #FAECC5; /* GPT의 메시지 배경색 */
+            border-radius: 10px;
+            padding: 8px;
+        }
         .inputArea {
             margin-top: 20px;
             display: flex;
@@ -69,6 +74,7 @@
     </style>
 </head>
 <body>
+<div id="user_language" style="display: none"></div>
 <div class="container">
     <div id="user_name" style="display: none;">User Name</div>
     <div>
@@ -122,7 +128,11 @@
             newMsg.innerText = data.sender + ': ' + data.msg;
             if (data.sender === document.getElementById('user_name').innerText) {
                 newMsg.classList.add('ownMessage');
-            } else {
+            }
+            else if (data.sender === "GPT"){
+                newMsg.classList.add('gptMessage');
+            }
+            else {
                 newMsg.classList.add('otherMessage');
             }
         }
@@ -138,18 +148,31 @@
     }
 
     // 메시지 전송 함수
-    function sendMsg() {
+    async function sendMsg() {
         let userName = document.getElementById('user_name').innerText;
         let content = document.querySelector('.content').value;
-        let talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": content};
-        // JSON 형태로 메시지를 전송합니다.
-        socket.send(JSON.stringify(talkMsg));
+        let language = document.getElementById('user_language').innerText;
+        let isOffensive = await detectAggressiveMessage(content, urlParams.get('roomId'), language);
+        let talkMsg = null;
+
+        if (isOffensive === true) {
+            talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": "*****"};
+            socket.send(JSON.stringify(talkMsg));
+            talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": "GPT", "msg": "An offensive message has been detected."};
+            socket.send(JSON.stringify(talkMsg));
+            return ;
+        }
+        else {
+            talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": content};
+            socket.send(JSON.stringify(talkMsg));
+        }
+
 
         let messageArea = document.querySelector('.msgArea');
         let translationButton = document.createElement('button');
         translationButton.innerText = '교정';
         translationButton.onclick = function () {
-            translateMessage(content, urlParams.get('roomId'));
+            translateMessage(content, urlParams.get('roomId'), language);
         }
         messageArea.insertAdjacentElement('beforeend', translationButton); // 'beforeend' 위치에 버튼을 추가합니다.
     }

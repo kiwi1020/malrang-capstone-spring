@@ -38,7 +38,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                 .orElse(User.builder()
                         .email(email)
                         .nickname(name)
-                        .language("Korean")
+                        .language("korean")
                         .languageLevel("low")
                         .build());
 

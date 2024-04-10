@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: left;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .profile-info {
+            margin-bottom: 20px;
+        }
+
+        .profile-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-item label {
+            width: 120px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .profile-item select,
+        .profile-item span {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        #edit-btn,
+        #save-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #edit-btn:hover,
+        #save-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body onload="userInfo()">
+<div class="container">
+    <h1>User Profile</h1>
+    <div class="profile-info">
+        <div class="profile-item">
+            <label for="user_email">Email:</label>
+            <span id="user_email">user@example.com</span>
+        </div>
+        <div class="profile-item">
+            <label for="language">Language:</label>
+            <span id="user_language">Language</span>
+            <select id="language">
+                <option value="english">English</option>
+                <option value="korean">Korean</option>
+                <option value="spanish">Spanish</option>
+                <option value="japanese">Japanese</option>
+                <option value="chinese">Chinese</option>
+                <option value="french">French</option>
+                <!-- Add more language options as needed -->
+            </select>
+        </div>
+        <div class="profile-item">
+            <label for="language_level">Language Level:</label>
+            <span id="user_language_level">Language Level</span>
+            <select id="language_level">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+                <!-- Add more language level options as needed -->
+            </select>
+        </div>
+        <div class="profile-item">
+            <label for="user_name">Nickname:</label>
+            <span id="user_name">User123</span>
+        </div>
+    </div>
+    <button id="edit-btn" onclick="updateUserInfo()">Edit</button>
+</div>
+<script src="/js/article.js"></script>
+</body>
+</html>
