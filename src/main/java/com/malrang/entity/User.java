@@ -2,7 +2,6 @@ package com.malrang.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,16 +33,12 @@ public class User implements UserDetails {
     @Column(name = "language")
     private String language;
 
-    @Column(name = "languageLevel")
-    private String languageLevel;
-
     @Builder
-    public User(String email, String password, String nickname, String language, String languageLevel) {
+    public User(String email, String password, String nickname, String language) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.language = language;
-        this.languageLevel = languageLevel;
     }
 
     public User update(String nickname) {

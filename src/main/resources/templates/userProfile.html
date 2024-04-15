@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,6 +69,26 @@
         #save-btn:hover {
             background-color: #0056b3;
         }
+        .profile-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-item label {
+            width: 120px;
+            font-weight: bold;
+            margin-right: 10px; /* 레이블과 텍스트 상자 사이의 간격을 지정합니다 */
+        }
+
+        .profile-item input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+            flex: 1;
+        }
     </style>
 </head>
 <body onload="userInfo()">
@@ -80,7 +100,7 @@
             <span id="user_email">user@example.com</span>
         </div>
         <div class="profile-item">
-            <label for="language">Language:</label>
+            <label for="language">Native Language:</label>
             <span id="user_language">Language</span>
             <select id="language">
                 <option value="english">English</option>
@@ -89,22 +109,13 @@
                 <option value="japanese">Japanese</option>
                 <option value="chinese">Chinese</option>
                 <option value="french">French</option>
+                <option value="hindi">Hindi</option>
                 <!-- Add more language options as needed -->
             </select>
         </div>
         <div class="profile-item">
-            <label for="language_level">Language Level:</label>
-            <span id="user_language_level">Language Level</span>
-            <select id="language_level">
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-                <!-- Add more language level options as needed -->
-            </select>
-        </div>
-        <div class="profile-item">
             <label for="user_name">Nickname:</label>
-            <span id="user_name">User123</span>
+                <input type="text" id="user_name">
         </div>
     </div>
     <button id="edit-btn" onclick="updateUserInfo()">Edit</button>

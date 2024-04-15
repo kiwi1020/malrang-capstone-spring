@@ -24,7 +24,6 @@ public class UserService {
             // 기존 사용자의 필드를 업데이트합니다.
             existingUser.setNickname(dto.getNickname());
             existingUser.setLanguage(dto.getLanguage());
-            existingUser.setLanguageLevel(dto.getLanguageLevel());
 
             // 업데이트된 사용자를 저장합니다.
             return userRepository.save(existingUser);

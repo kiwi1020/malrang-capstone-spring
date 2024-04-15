@@ -9,12 +9,15 @@ import com.malrang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,9 +28,13 @@ public class testController {
     private final UserService userService;
 
     @PostMapping("/chat/createRoom")  //방을 만들었으면 해당 방으로 가야지.
-    public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomName, Principal principal) {
-        ChatDto.ChatRoom room = chatService.createRoom(roomName.getRoomName());;
+    public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomData, Principal principal) {
+
+        ChatDto.ChatRoom room = chatService.createRoom(roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel());;
         String userEmail = principal.getName();
+
+        chatService.addChatRoom(room.getRoomId(), roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel());
+
         Map<String, Object> response = new HashMap<>();
         response.put("roomId",room.getRoomId());
         response.put("roomName",room.getRoomName());
@@ -48,7 +55,6 @@ public class testController {
         response.put("userEmail", userEmail);
         response.put("userName", user.getNickname());
         response.put("userLanguages", user.getLanguage());
-        response.put("userLanguageLevel", user.getLanguageLevel());
         return ResponseEntity.ok(response);
     }
     @PostMapping("/userInfo/update")

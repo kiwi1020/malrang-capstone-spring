@@ -73,10 +73,14 @@ if (createButton) {
 
 function createRoom() {
     let roomName = document.getElementById('roomName').value;
+    let roomLanguage = document.getElementById('roomLanguage');
+    let roomLanguageLevel = document.getElementById('roomLanguageLevel');
 
     // 요청 본문 데이터 설정
     body = JSON.stringify({
         roomName: roomName,
+        roomLanguage: roomLanguage.options[roomLanguage.selectedIndex].value,
+        roomLanguageLevel: roomLanguageLevel.options[roomLanguageLevel.selectedIndex].value
     });
 
     // 성공 및 실패 시 실행할 콜백 함수 정의
@@ -164,28 +168,28 @@ function translateMessage(message, roomId, language) {
         case "korean":
             body = JSON.stringify({
                 question: message +
-                    "란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해주고  올바른 문장으로 교정해줘."
+                    ".란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
             })
             break;
 
         case "japanese":
             body = JSON.stringify({
                 question: message +
-                    "文章が英語の文法的に正しいか、私が尋ねた文章を入れて日本語で説明してくれ、もし正しくないなら、正しくない理由を詳しく説明してください."
+                    ".文章が英語の文法的に正しいか、私が尋ねた文章を入れて日本語で説明してくれ、もし正しくないなら、正しくない理由を詳しく説明してください."
             })
             break;
 
         case "chinese":
             body = JSON.stringify({
                 question: message +
-                    "请用中文解释该句子的英语语法是否正确。如果不正确，请详细解释为什么不正确."
+                    ".请用中文解释该句子的英语语法是否正确。如果不正确，请详细解释为什么不正确."
             })
             break;
 
         case "english":
             body = JSON.stringify({
                 question: message +
-                    "Please explain in English whether the sentence is grammatically correct. If it is not correct, please explain in detail why it is incorrect."
+                    ".Please explain in English whether the sentence is grammatically correct. If it is not correct, please explain in detail why it is incorrect."
             })
             break;
 
@@ -193,14 +197,21 @@ function translateMessage(message, roomId, language) {
         case "french":
             body = JSON.stringify({
                 question: message +
-                    "Veuillez inclure la phrase que j'ai demandé si elle est grammaticalement correcte en anglais et l'expliquer en français. Si elle n'est pas correcte, veuillez expliquer en détail pourquoi elle est incorrecte."
+                    ".Veuillez inclure la phrase que j'ai demandé si elle est grammaticalement correcte en anglais et l'expliquer en français. Si elle n'est pas correcte, veuillez expliquer en détail pourquoi elle est incorrecte."
             })
             break;
 
         case "spanish":
             body = JSON.stringify({
                 question: message +
-                    "Por favor explique en español la oración que pregunté sobre si es gramaticalmente correcta en inglés, si no es correcta explique detalladamente por qué es incorrecta."
+                    ".Por favor explique en español la oración que pregunté sobre si es gramaticalmente correcta en inglés, si no es correcta explique detalladamente por qué es incorrecta."
+            })
+            break;
+
+        case "hindi":
+            body = JSON.stringify({
+                question: message +
+                    ".कृपया उस वाक्य को हिंदी में समझाएं जिसके बारे में मैंने पूछा था कि क्या यह अंग्रेजी में व्याकरणिक रूप से सही है। यदि यह सही नहीं है, तो कृपया बताएं कि यह गलत क्यों है और इसे सही वाक्य में सुधारें।"
             })
             break;
 
@@ -244,10 +255,11 @@ function userInfo(callback) {
         let userNameElement = document.getElementById('user_name');
         let userEmailElement = document.getElementById('user_email');
         let userLanguageElement = document.getElementById('user_language');
-        let userLanguageLevelElement = document.getElementById('user_language_level');
 
-        if (userNameElement)
+        if (userNameElement) {
             userNameElement.innerText = json.userName;
+            userNameElement.value = json.userName;
+        }
 
         if (userEmailElement)
             userEmailElement.innerText = json.userEmail;
@@ -255,11 +267,6 @@ function userInfo(callback) {
         if (userLanguageElement)
             userLanguageElement.innerText = json.userLanguages;
 
-        if (userLanguageLevelElement)
-            userLanguageLevelElement.innerText = json.userLanguageLevel;
-
-        if (userNameElement)
-            userNameElement.innerText = json.userName;
 
         console.log(json.userName + '사용자 정보를 가져오는데 성공했습니다.');
 
@@ -280,15 +287,13 @@ function userInfo(callback) {
 function updateUserInfo() {
 
     let email = document.getElementById('user_email').innerText;
-    let nickname = document.getElementById('user_name').innerText;
+    let nickname = document.getElementById('user_name').value;
     let language = document.getElementById('language').value;
-    let language_level = document.getElementById('language_level').value;
     // 요청 본문 데이터 설정
     let body = JSON.stringify({
         email: email,
         nickname: nickname,
-        language: language,
-        languageLevel: language_level
+        language: language
     });
 
     // 성공 및 실패 시 실행할 콜백 함수 정의
@@ -334,6 +339,16 @@ async function detectAggressiveMessage(message, roomId, language) {
         console.error('Error:', error);
         alert('감지 실패했습니다.');
     }
-
     return isOffensive;
+}
+
+function filterRooms() {
+    let roomName = document.getElementById('roomName').value;
+    let roomLanguage = document.getElementById('roomLanguage');
+    let roomLanguageLevel = document.getElementById('roomLanguageLevel');
+
+
+    let url = `/chat/chatList/filterRooms?roomName=${roomName}&roomLanguage=${roomLanguage.options[roomLanguage.selectedIndex].value}&roomLanguageLevel=${roomLanguageLevel.options[roomLanguageLevel.selectedIndex].value}`;
+
+    location.replace(url);
 }
