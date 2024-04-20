@@ -31,14 +31,10 @@ public class testController {
     public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomData, Principal principal) {
 
         ChatDto.ChatRoom room = chatService.createRoom(roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel());;
-        String userEmail = principal.getName();
-
         chatService.addChatRoom(room.getRoomId(), roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel());
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomId",room.getRoomId());
-        response.put("roomName",room.getRoomName());
-        response.put("userEmail",userEmail);
         return ResponseEntity.ok(response);  //만든사람이 채팅방 1빠로 들어가게 됩니다
     }
 

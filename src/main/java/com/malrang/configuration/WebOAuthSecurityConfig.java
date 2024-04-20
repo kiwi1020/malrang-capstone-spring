@@ -81,7 +81,6 @@ public class WebOAuthSecurityConfig {
         http.exceptionHandling(exceptionHandling -> exceptionHandling
                 .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                         new AntPathRequestMatcher("/api/**")));
-
         return http.build();
     }
 

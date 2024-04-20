@@ -161,92 +161,73 @@ async function httpRequest(method, url, body, success, fail) {
     }
 }
 
-function translateMessage(message, roomId, language) {
+async function translateMessage(message, roomId, language) {
+    try {
+        let body;
+        switch (language) {
+            case "korean":
+                body = JSON.stringify({
+                    question: message + ".란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
+                });
+                break;
+            case "japanese":
+                body = JSON.stringify({
+                    question: message + ".文章が英語の文法的に正しいか、私が尋ねた文章を入れて日本語で説明してくれ、もし正しくないなら、正しくない理由を詳しく説明してください."
+                });
+                break;
+            case "chinese":
+                body = JSON.stringify({
+                    question: message + ".请用中文解释该句子的英语语法是否正确。如果不正确，请详细解释为什么不正确."
+                });
+                break;
+            case "english":
+                body = JSON.stringify({
+                    question: message + ".Please explain in English whether the sentence is grammatically correct. If it is not correct, please explain in detail why it is incorrect."
+                });
+                break;
+            case "french":
+                body = JSON.stringify({
+                    question: message + ".Veuillez inclure la phrase que j'ai demandé si elle est grammaticalement correcte en anglais et l'expliquer en français. Si elle n'est pas correcte, veuillez expliquer en détail pourquoi elle est incorrecte."
+                });
+                break;
+            case "spanish":
+                body = JSON.stringify({
+                    question: message + ".Por favor explique en español la oración que pregunté sobre si es gramaticalmente correcta en inglés, si no es correcta explique detalladamente por qué es incorrecta."
+                });
+                break;
+            case "hindi":
+                body = JSON.stringify({
+                    question: message + ".कृपया जांचें कि ऊपर पूछा गया वाक्य अंग्रेजी में व्याकरणिक रूप से सही है या नहीं। यदि कुछ गलत है तो कृपया हिंदी में बताएं कि वह गलत क्यों है और उसे सही वाक्य में सही करें।"
+                });
+                break;
+            default:
+                body = JSON.stringify({
+                    question: "Please answer the sentence ‘Translation failed’ exactly."
+                });
+        }
 
-    switch (language) {
+        const response = await fetch('/chat-gpt/question', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
 
-        case "korean":
-            body = JSON.stringify({
-                question: message +
-                    ".란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
-            })
-            break;
-
-        case "japanese":
-            body = JSON.stringify({
-                question: message +
-                    ".文章が英語の文法的に正しいか、私が尋ねた文章を入れて日本語で説明してくれ、もし正しくないなら、正しくない理由を詳しく説明してください."
-            })
-            break;
-
-        case "chinese":
-            body = JSON.stringify({
-                question: message +
-                    ".请用中文解释该句子的英语语法是否正确。如果不正确，请详细解释为什么不正确."
-            })
-            break;
-
-        case "english":
-            body = JSON.stringify({
-                question: message +
-                    ".Please explain in English whether the sentence is grammatically correct. If it is not correct, please explain in detail why it is incorrect."
-            })
-            break;
-
-
-        case "french":
-            body = JSON.stringify({
-                question: message +
-                    ".Veuillez inclure la phrase que j'ai demandé si elle est grammaticalement correcte en anglais et l'expliquer en français. Si elle n'est pas correcte, veuillez expliquer en détail pourquoi elle est incorrecte."
-            })
-            break;
-
-        case "spanish":
-            body = JSON.stringify({
-                question: message +
-                    ".Por favor explique en español la oración que pregunté sobre si es gramaticalmente correcta en inglés, si no es correcta explique detalladamente por qué es incorrecta."
-            })
-            break;
-
-        case "hindi":
-            body = JSON.stringify({
-                question: message +
-                    ".कृपया उस वाक्य को हिंदी में समझाएं जिसके बारे में मैंने पूछा था कि क्या यह अंग्रेजी में व्याकरणिक रूप से सही है। यदि यह सही नहीं है, तो कृपया बताएं कि यह गलत क्यों है और इसे सही वाक्य में सुधारें।"
-            })
-            break;
-
-        default:
-            body = JSON.stringify({
-                question: "Please answer the sentence ‘Translation failed’ exactly."
-            })
-    }
-
-    fetch('/chat-gpt/question', {
-        method: 'POST',
-        headers: { // 로컬 스토리지에서 액세스 토큰 값을 가져와 헤더에 추가
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-            'Content-Type': 'application/json',
-        },
-        body: body,
-    }).then(data => {
-        return data.json();
-    }).then((json) => {
-        console.log(json); // 서버에서 주는 json데이터가 출력
-
+        const json = await response.json();
         let messageArea = document.querySelector('.msgArea');
         let translatedMessageElement = document.createElement('div');
-        let transMsg = {"type": "TALK", "roomId": roomId, "sender": 'GPT', "msg": json.answer}
-
-        //translatedMessageElement.innerText = json.answer;
-        socket.send(JSON.stringify(transMsg));
-        //messageArea.appendChild(translatedMessageElement);
+        translatedMessageElement.classList.add('gptMessage');
+        translatedMessageElement.innerText = json.answer;
+        // let transMsg = {"type": "TALK", "roomId": roomId, "sender": 'GPT', "msg": json.answer}
+        // socket.send(JSON.stringify(transMsg));
+        messageArea.insertAdjacentElement('beforeend', translatedMessageElement);
         alert('번역 완료했습니다.');
-    })
-        .catch(error => {
-            // 오류가 발생한 경우 처리합니다.
-            console.error('Error:', error);
-            alert('번역 실패했습니다.');
-        });
+    } catch (error) {
+        console.error('Error:', error);
+        alert('번역 실패했습니다.');
+    }
 }
 
 function userInfo(callback) {
@@ -277,7 +258,7 @@ function userInfo(callback) {
 
     function fail() {
         console.error('사용자 정보를 가져오는데 실패했습니다.');
-        alert('사용자 정보를 가져오는데 실패했습니다.');
+        alert('로그인이 필요한 서비스입니다.');
         window.location.href = "/login";
     };
     // HTTP 요청 보내기
@@ -331,7 +312,7 @@ async function detectAggressiveMessage(message, roomId, language) {
         let json = await response.json();
         console.log(json);
 
-        if (json.answer === "true") {
+        if (json.answer === "true"|| json.answer === "True") {
             alert('불쾌한 메세지 감지 완료.');
             isOffensive = true;
         }
