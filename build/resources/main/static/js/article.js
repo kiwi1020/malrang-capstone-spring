@@ -312,7 +312,7 @@ async function detectAggressiveMessage(message, roomId, language) {
         let json = await response.json();
         console.log(json);
 
-        if (json.answer === "true"|| json.answer === "True") {
+        if (json.answer === "true" || json.answer === "True") {
             alert('불쾌한 메세지 감지 완료.');
             isOffensive = true;
         }
@@ -332,4 +332,23 @@ function filterRooms() {
     let url = `/chat/chatList/filterRooms?roomName=${roomName}&roomLanguage=${roomLanguage.options[roomLanguage.selectedIndex].value}&roomLanguageLevel=${roomLanguageLevel.options[roomLanguageLevel.selectedIndex].value}`;
 
     location.replace(url);
+}
+
+async function setRoomHeadCount(roomId, status) {
+
+    let body = JSON.stringify({
+        roomId: roomId,
+        status: status
+    });
+
+    function success() {
+        console.log('채팅방 인원 수 설정에 성공했습니다.');
+        alert('채팅방 인원 수 설정에 성공했습니다.');
+    };
+
+    function fail() {
+        console.error('채팅방 인원 수 설정에 실패했습니다.');
+        alert('채팅방 인원 수 설정에 실패했습니다.');
+    };
+    await httpRequest('POST', '/chat/setHeadCount', body, success, fail);
 }

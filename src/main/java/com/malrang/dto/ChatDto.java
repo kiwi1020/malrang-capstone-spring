@@ -19,15 +19,17 @@ public class ChatDto {
         private String roomName;
         private String roomLanguage;
         private String roomLanguageLevel;
+        private Long roomHeadCount;
 
         private Set<WebSocketSession> sessions = new HashSet<>();
 
         @Builder
-        public ChatRoom(String roomId, String roomName, String roomLanguage, String roomLanguageLevel) {
+        public ChatRoom(String roomId, String roomName, String roomLanguage, String roomLanguageLevel, Long roomHeadCount) {
             this.roomId = roomId;
             this.roomName = roomName;
             this.roomLanguage = roomLanguage;
             this.roomLanguageLevel = roomLanguageLevel;
+            this.roomHeadCount = roomHeadCount;
         }
     }
     @Getter
@@ -36,6 +38,13 @@ public class ChatDto {
         String roomName;
         String roomLanguage;
         String roomLanguageLevel;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class addHeadCount {
+        String roomId;
+        String status;
     }
 
     @Getter

@@ -141,11 +141,13 @@
     };
 
     // 채팅방 입장 함수
-    function enterRoom(socket) {
+    async function enterRoom(socket) {
         let userName = document.getElementById('user_name').innerText;
-        let enterMsg = {"type": "ENTER", "roomId": urlParams.get('roomId') , "sender": userName, "msg": ""};
+        let enterMsg = {"type": "ENTER", "roomId": urlParams.get('roomId'), "sender": userName, "msg": ""};
         // JSON 형태로 메시지를 전송합니다.
         socket.send(JSON.stringify(enterMsg));
+        // 인원수 추가
+        await setRoomHeadCount(urlParams.get('roomId'), 'join');
     }
 
     // 메시지 전송 함수
@@ -180,12 +182,13 @@
     }
 
     // 채팅방 나가기 함수
-    function quit() {
+    async function quit() {
         let userName = document.getElementById('user_name').innerText;
         let quitMsg = {"type": "QUIT", "roomId": urlParams.get('roomId'), "sender": userName, "msg": ""};
         // JSON 형태로 메시지를 전송하고 연결을 종료합니다.
         socket.send(JSON.stringify(quitMsg));
         socket.close();
+        await setRoomHeadCount(urlParams.get('roomId'), 'quit');
         // 채팅방 목록 페이지로 이동합니다.
         location.href = "/chat/chatList";
     }

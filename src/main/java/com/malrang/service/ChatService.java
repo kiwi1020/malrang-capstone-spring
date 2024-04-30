@@ -36,32 +36,34 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatDto.ChatRoom createRoom(String roomName, String roomLanguage, String roomLanguageLevel) {
+    public ChatDto.ChatRoom createRoom(String roomName, String roomLanguage, String roomLanguageLevel, Long roomHeadCount) {
         String randomId = UUID.randomUUID().toString();
         ChatDto.ChatRoom chatRoom = ChatDto.ChatRoom.builder()
                 .roomId(randomId)
                 .roomName(roomName)
                 .roomLanguage(roomLanguage)
                 .roomLanguageLevel(roomLanguageLevel)
+                .roomHeadCount(roomHeadCount)
                 .build();
         chatRooms.put(randomId, chatRoom);
         return chatRoom;
     }
 
     @Transactional
-    public void addChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel)  {
+    public void addChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount)  {
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomId(roomId)
                 .roomName(roomName)
                 .roomLanguage(roomLanguage)
                 .roomLevel(roomLevel)
+                .roomHeadCount(roomHeadCount)
                 .build();
         chatRoomRepository.save(chatRoom);
 
     }
     public List<ChatDto.ChatRoom> findAllRoom() {
         return chatRoomRepository.findAll().stream()
-                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(),chat.getRoomLanguage(), chat.getRoomLevel() ))
+                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(),chat.getRoomLanguage(), chat.getRoomLevel(), chat.getRoomHeadCount() ))
                 .collect(Collectors.toList());
     }
 
@@ -73,7 +75,28 @@ public class ChatService {
         String level = (roomLevel == null) ? "" : roomLevel;
 
         return chatRoomRepository.findByRoomNameContainingAndRoomLanguageContainingAndRoomLevelContaining(name, language, level).stream()
-                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(),chat.getRoomLanguage(), chat.getRoomLevel() ))
+                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(),chat.getRoomLanguage(), chat.getRoomLevel() ,chat.getRoomHeadCount()))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void setHeadCount(String roomId, String status) throws Exception {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElseThrow(() -> new Exception("room doesn't exist"));
+
+        // 방을 찾지 못한 경우 예외 처리
+        if (chatRoom == null) {
+            throw new RuntimeException("Room not found with ID: " + roomId);
+        }
+
+        // 현재 인원수를 가져와서 1을 증가시킵니다.
+        Long currentHeadCount = (chatRoom.getRoomHeadCount());
+        Long newHeadCount = status.equals("join") ?  currentHeadCount + 1 : currentHeadCount - 1;
+
+        // 새로운 인원수를 저장합니다.
+        chatRoom.setRoomHeadCount(newHeadCount);
+
+        // 변경사항을 저장합니다.
+        chatRoomRepository.save(chatRoom);
+    }
+
 }

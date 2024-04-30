@@ -31,12 +31,19 @@ public class ChatRoom {
     @Column(name = "roomLevel")
     private String roomLevel;
 
+    @Column(name = "roomHeadCount")
+    private Long roomHeadCount;
+
+    public void setRoomHeadCount(Long newHeadCount) {
+        this.roomHeadCount = newHeadCount;
+    }
 
     @Builder
-    public ChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel) {
+    public ChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomLanguage = roomLanguage;
         this.roomLevel = roomLevel;
+        this.roomHeadCount = roomHeadCount;
     }
 }

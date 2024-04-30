@@ -30,8 +30,8 @@ public class testController {
     @PostMapping("/chat/createRoom")  //방을 만들었으면 해당 방으로 가야지.
     public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomData, Principal principal) {
 
-        ChatDto.ChatRoom room = chatService.createRoom(roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel());;
-        chatService.addChatRoom(room.getRoomId(), roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel());
+        ChatDto.ChatRoom room = chatService.createRoom(roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel(), 0L);;
+        chatService.addChatRoom(room.getRoomId(), roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel(), 0L);
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomId",room.getRoomId());
@@ -58,4 +58,11 @@ public class testController {
         userService.update(dto);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PostMapping("/chat/setHeadCount")
+    public ResponseEntity setHeadCount(@RequestBody ChatDto.addHeadCount dto) throws Exception {
+        chatService.setHeadCount(dto.getRoomId(), dto.getStatus());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }
