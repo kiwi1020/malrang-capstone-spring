@@ -134,6 +134,7 @@ async function httpRequest(method, url, body, success, fail) {
             const text = await response.text();
             const json = text ? JSON.parse(text) : null;
             success(json);
+            return json;
         } else if (response.status === 401 && getCookie('refresh_token')) {
             const res = await fetch('/api/token', {
                 method: 'POST',
@@ -158,6 +159,7 @@ async function httpRequest(method, url, body, success, fail) {
         }
     } catch (error) {
         console.error('Error in httpRequest:', error);
+        throw error;
     }
 }
 
@@ -351,4 +353,37 @@ async function setRoomHeadCount(roomId, status) {
         alert('채팅방 인원 수 설정에 실패했습니다.');
     };
     await httpRequest('POST', '/chat/setHeadCount', body, success, fail);
+}
+
+async function matchUsers() {
+
+    let body = null;
+
+    const matchingMessageDiv = document.getElementById('matchingMessage');
+    matchingMessageDiv.style.display = 'block';
+
+    function success(response) {
+        if (response.roomId != null)
+            location.href = `/chat/chatRoom?roomId=` + response.roomId;
+    };
+
+    function fail() {
+        console.error('대기열 참가에 실패했습니다.');
+        alert('대기열 참가에 실패했습니다.');
+    };
+    await httpRequest('GET', '/chat/join', body, success, fail);
+}
+
+async function cancelMatch() {
+
+    let body = null;
+
+    function success() {
+        location.href = `/chat/chatList`
+    };
+
+    function fail() {
+        console.error('대기열 취소에 실패했습니다.');
+    };
+    await httpRequest('GET', '/cancel', body, success, fail);
 }

@@ -2,10 +2,9 @@ package com.malrang.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
 @EnableWebSocket
@@ -21,4 +20,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
         // setAllowedOrigins("*")는 모든 ip에서 접속 가능하도록 해줌
         registry.addHandler(webSocketHandler, "/ws/chat").setAllowedOrigins("*");
     }
+
+    //STOMP
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry config) {
+//        config.enableSimpleBroker("/topic/chat");
+//        config.setApplicationDestinationPrefixes("/app");
+//    }
+//
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/chat-websocket").withSockJS();
+//    }
 }
