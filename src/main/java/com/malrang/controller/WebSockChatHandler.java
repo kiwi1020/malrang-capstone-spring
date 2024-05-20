@@ -50,15 +50,16 @@ public class WebSockChatHandler extends TextWebSocketHandler {
     }
 
     private void sendToEachSocket(Set<WebSocketSession> sessions, TextMessage message) {
-        sessions.parallelStream().forEach(roomSession -> {
-            try {
-                roomSession.sendMessage(message);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        synchronized (sessions) {
+            for (WebSocketSession roomSession : sessions) {
+                try {
+                    roomSession.sendMessage(message);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        });
+        }
     }
-
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {

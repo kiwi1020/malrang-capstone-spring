@@ -1,76 +1,3 @@
-// 삭제 기능
-const deleteButton = document.getElementById('delete-btn');
-
-if (deleteButton) {
-    deleteButton.addEventListener('click', event => {
-        let id = document.getElementById('article-id').value;
-
-        function success() {
-            alert('삭제가 완료되었습니다.');
-            location.replace('/articles');
-        }
-
-        function fail() {
-            alert('삭제 실패했습니다.');
-            location.replace('/articles');
-        }
-
-        httpRequest('DELETE', `/api/articles/${id}`, null, success, fail);
-    });
-}
-
-// 수정 기능
-const modifyButton = document.getElementById('modify-btn');
-
-if (modifyButton) {
-    modifyButton.addEventListener('click', event => {
-        let params = new URLSearchParams(location.search);
-        let id = params.get('id');
-
-        body = JSON.stringify({
-            title: document.getElementById('title').value,
-            content: document.getElementById('content').value
-        })
-
-        function success() {
-            alert('수정 완료되었습니다.');
-            location.replace(`/articles/${id}`);
-        }
-
-        function fail() {
-            alert('수정 실패했습니다.');
-            location.replace(`/articles/${id}`);
-        }
-
-        httpRequest('PUT', `/api/articles/${id}`, body, success, fail);
-    });
-}
-
-// 생성 기능
-const createButton = document.getElementById('create-btn');
-
-if (createButton) {
-    // 등록 버튼을 클릭하면 /api/articles로 요청을 보낸다
-    createButton.addEventListener('click', event => {
-        body = JSON.stringify({
-            title: document.getElementById('title').value,
-            content: document.getElementById('content').value
-        });
-
-        function success() {
-            alert('등록 완료되었습니다.');
-            location.replace('/articles');
-        };
-
-        function fail() {
-            alert('등록 실패했습니다.');
-            location.replace('/articles');
-        };
-
-        httpRequest('POST', '/api/articles', body, success, fail)
-    });
-}
-
 function createRoom() {
     let roomName = document.getElementById('roomName').value;
     let roomLanguage = document.getElementById('roomLanguage');
@@ -356,34 +283,60 @@ async function setRoomHeadCount(roomId, status) {
 }
 
 async function matchUsers() {
-
-    let body = null;
-
     const matchingMessageDiv = document.getElementById('matchingMessage');
+    const language = document.getElementById("modalLanguage").value;
     matchingMessageDiv.style.display = 'block';
 
-    function success(response) {
-        if (response.roomId != null)
-            location.href = `/chat/chatRoom?roomId=` + response.roomId;
-    };
+    const url = '/chat/join?language=' + language;
 
-    function fail() {
-        console.error('대기열 참가에 실패했습니다.');
-        alert('대기열 참가에 실패했습니다.');
-    };
-    await httpRequest('GET', '/chat/join', body, success, fail);
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            if (responseData.roomId != null)
+                location.href = `/chat/chatRoom?roomId=` + responseData.roomId;
+            else
+                console.error('대기열 참가에 실패했습니다.');
+        } else {
+            console.error('대기열 참가에 실패했습니다.');
+        }
+    } catch (error) {
+        console.error('대기열 참가에 실패했습니다.', error);
+    }
 }
 
 async function cancelMatch() {
+    const language = document.getElementById("modalLanguage").value;
+    const url = '/cancel?language=' + language;
 
-    let body = null;
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    function success() {
-        location.href = `/chat/chatList`
-    };
+        if (response.ok) {
+            location.href = `/chat/chatList`;
+        } else {
+            console.error('대기열 취소에 실패했습니다.');
+        }
+    } catch (error) {
+        console.error('대기열 취소에 실패했습니다.', error);
+    }
+}
 
-    function fail() {
-        console.error('대기열 취소에 실패했습니다.');
-    };
-    await httpRequest('GET', '/cancel', body, success, fail);
+function showLanguageModal() {
+    document.getElementById('languageModal').style.display = 'flex';
+}
+
+function closeLanguageModal() {
+    document.getElementById('languageModal').style.display = 'none';
 }

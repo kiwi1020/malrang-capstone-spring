@@ -51,6 +51,12 @@ public class ChatService {
 
     @Transactional
     public void addChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount)  {
+
+        Optional<ChatRoom> existingRoom = chatRoomRepository.findByRoomId(roomId);
+        if (existingRoom.isPresent()) {
+            return;
+        }
+
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomId(roomId)
                 .roomName(roomName)

@@ -1,5 +1,4 @@
 package com.malrang.controller;
-
 import com.malrang.dto.MatchDto;
 import com.malrang.service.MatchService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,60 +7,47 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import java.security.Principal;
 
 @RestController
 public class MatchController {
 
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
-    private String sessionId = null;
     @Autowired
     private MatchService matchService;
 
-    // tag :: async
     @GetMapping("/chat/join")
     @ResponseBody
-    public DeferredResult<MatchDto.MatchResponse> joinRequest(HttpServletRequest request) {
-        sessionId = request.getSession().getId();
+    public DeferredResult<MatchDto.MatchResponse> joinRequest(HttpServletRequest request, @RequestParam String language) {
+        String sessionId = request.getSession().getId(); // 현재 요청의 세션 ID 가져오기
         logger.info(">> Join request. session id : {}", sessionId);
 
         final MatchDto.MatchRequest user = new MatchDto.MatchRequest(sessionId);
         final DeferredResult<MatchDto.MatchResponse> deferredResult = new DeferredResult<>(null);
-        matchService.joinChatRoom(user, deferredResult);
+        matchService.joinChatRoom(user, deferredResult, language);
 
-        deferredResult.onCompletion(() -> matchService.cancelChatRoom(user));
-        deferredResult.onError((throwable) -> matchService.cancelChatRoom(user));
-        deferredResult.onTimeout(() -> matchService.timeout(user));
+        deferredResult.onCompletion(() -> matchService.cancelChatRoom(user, language));
+        deferredResult.onError((throwable) -> matchService.cancelChatRoom(user, language));
+        deferredResult.onTimeout(() -> matchService.timeout(user, language));
 
         return deferredResult;
     }
 
     @GetMapping("/cancel")
     @ResponseBody
-    public ResponseEntity<Void> cancelRequest() {
+    public ResponseEntity<Void> cancelRequest(HttpServletRequest request, @RequestParam String language) {
+        String sessionId = request.getSession().getId(); // 현재 요청의 세션 ID 가져오기
         logger.info(">> Cancel request. session id : {}", sessionId);
 
         final MatchDto.MatchRequest user = new MatchDto.MatchRequest(sessionId);
-        matchService.cancelChatRoom(user);
+        matchService.cancelChatRoom(user, language);
 
         return ResponseEntity.ok().build();
     }
 
-    // -- tag :: async
-
-    // tag :: websocket stomp
-//    @MessageMapping("/chat.message/{chatRoomId}")
-//    public void sendMessage(@DestinationVariable("chatRoomId") String chatRoomId, @Payload ChatMessage chatMessage) {
-//        logger.info("Request message. roomd id : {} | chat message : {} | principal : {}", chatRoomId, chatMessage);
-//        if (!StringUtils.hasText(chatRoomId) || chatMessage == null) {
-//            return;
-//        }
-//
-//        if (chatMessage.getMessageType() == MessageType.CHAT) {
-//            chatService.sendMessage(chatRoomId, chatMessage);
-//        }
-//    }
-    // -- tag :: websocket stomp
 }

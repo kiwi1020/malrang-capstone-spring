@@ -172,6 +172,46 @@
             background-color: #c82333;
         }
 
+        .modal {
+            display: none; /* 숨김 상태로 시작 */
+            position: fixed; /* 고정 위치 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .modal-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+
+        .modal-content button.close {
+            background-color: #dc3545;
+        }
+
+        .modal-content button.match {
+            background-color: #28a745;
+        }
 
     </style>
 </head>
@@ -209,7 +249,7 @@
 
     <button onclick="createRoom()">방 만들기</button>
     <button id="filterButton" onclick=filterRooms()>방 검색</button>
-    <button class="matching-button" onclick="matchUsers()">유저 매칭 시작</button>
+    <button class="matching-button" onclick="showLanguageModal()">유저 매칭 시작</button>
 
     <div class="alert" id="matchingMessage">
         <p>매칭 중입니다. 잠시만 기다려주세요...</p>
@@ -246,6 +286,23 @@
         </tbody>
     </table>
 </div>
+
+<div class="modal" id="languageModal">
+    <div class="modal-content">
+        <h2>채팅방에서 사용할 언어를 선택하세요</h2>
+        <select id="modalLanguage">
+            <option value="korean">Korean</option>
+            <option value="english">English</option>
+            <option value="chinese">Chinese</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+            <option value="japanese">Japanese</option>
+        </select>
+        <button class="match" onclick="matchUsers()">매칭 시작</button>
+        <button class="close" onclick="closeLanguageModal()">취소</button>
+    </div>
+</div>
+
 <script src="/js/article.js"></script>
 <script src="/js/token.js"></script>
 </body>
