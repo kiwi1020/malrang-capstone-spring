@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +34,16 @@ public class User implements UserDetails {
     @Column(name = "language")
     private String language;
 
+    @Column(name = "average_rating")
+    private Double averageRating;
+
+    @OneToMany(mappedBy = "ratedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserRating> ratings = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_room_id")
+    private ChatRoom chatRoom;
+
     @Builder
     public User(String email, String password, String nickname, String language) {
         this.email = email;
@@ -43,11 +54,19 @@ public class User implements UserDetails {
 
     public User update(String nickname) {
         this.nickname = nickname;
-
         return this;
     }
 
-
+    public void updateAverageRating() {
+        if (ratings != null && !ratings.isEmpty()) {
+            double sum = ratings.stream()
+                    .mapToDouble(UserRating::getRating)
+                    .sum();
+            averageRating = sum / ratings.size();
+        } else {
+            averageRating = 0.0;
+        }
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

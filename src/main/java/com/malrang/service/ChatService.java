@@ -3,7 +3,9 @@ package com.malrang.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.malrang.dto.ChatDto;
 import com.malrang.entity.ChatRoom;
+import com.malrang.entity.User;
 import com.malrang.repository.ChatRoomRepository;
+import com.malrang.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ public class ChatService {
 
     private final ObjectMapper objectMapper;
     private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
     private Map<String, ChatDto.ChatRoom> chatRooms;
 
     @PostConstruct
@@ -86,7 +89,7 @@ public class ChatService {
     }
 
     @Transactional
-    public void setHeadCount(String roomId, String status) throws Exception {
+    public void setHeadCount(String roomId, String status, String userEmail) throws Exception {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElseThrow(() -> new Exception("room doesn't exist"));
 
         // 방을 찾지 못한 경우 예외 처리
@@ -101,8 +104,25 @@ public class ChatService {
         // 새로운 인원수를 저장합니다.
         chatRoom.setRoomHeadCount(newHeadCount);
 
+        // 사용자를 추가 또는 제거합니다.
+        if (status.equals("join")) {
+            User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new Exception("User doesn't exist"));
+            chatRoom.addUser(user);
+        } else if (status.equals("quit")) {
+            User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new Exception("User doesn't exist"));
+            chatRoom.removeUser(user);
+        }
         // 변경사항을 저장합니다.
         chatRoomRepository.save(chatRoom);
     }
 
+    @Transactional
+    public List<String> getParticipants(String roomId) throws Exception {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElseThrow(() -> new Exception("room doesn't exist"));
+        List<String> emails = new ArrayList<>();
+        for (User user : chatRoom.getUsers()) {
+            emails.add(user.getEmail());
+        }
+        return emails;
+    }
 }

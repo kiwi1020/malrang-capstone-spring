@@ -1,7 +1,9 @@
 package com.malrang.controller;
 
 import com.malrang.dto.ChatDto;
+import com.malrang.dto.RatingDto;
 import com.malrang.dto.UserDto;
+import com.malrang.entity.ChatRoom;
 import com.malrang.entity.User;
 import com.malrang.service.ChatService;
 import com.malrang.service.UserDetailService;
@@ -10,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -60,9 +59,23 @@ public class testController {
     }
 
     @PostMapping("/chat/setHeadCount")
-    public ResponseEntity setHeadCount(@RequestBody ChatDto.addHeadCount dto) throws Exception {
-        chatService.setHeadCount(dto.getRoomId(), dto.getStatus());
+    public ResponseEntity setHeadCount(@RequestBody ChatDto.addHeadCount dto, Principal principal) throws Exception {
+        String userEmail = principal.getName();
+        chatService.setHeadCount(dto.getRoomId(), dto.getStatus(), userEmail);
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
+    @GetMapping("chat/getParticipants")
+    public ResponseEntity<List<String>> getParticipants(@RequestParam String roomId) throws Exception {
+        // roomId를 사용하여 참가자 목록을 가져옵니다.
+        List<String> participants = chatService.getParticipants(roomId);
+        return ResponseEntity.ok(participants);
+    }
+
+    @PostMapping("chat/rateUser")
+    public ResponseEntity rateUser(@RequestBody RatingDto.RatingRequest request) throws Exception {
+        userService.rateUser(request.getRatedUserEmail(), request.getRaterUserEmail(), request.getRating());
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

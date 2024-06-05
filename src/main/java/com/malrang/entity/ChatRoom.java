@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class ChatRoom {
     @Column(name = "roomHeadCount")
     private Long roomHeadCount;
 
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<User> users = new ArrayList<>();
+
     public void setRoomHeadCount(Long newHeadCount) {
         this.roomHeadCount = newHeadCount;
     }
@@ -45,5 +49,16 @@ public class ChatRoom {
         this.roomLanguage = roomLanguage;
         this.roomLevel = roomLevel;
         this.roomHeadCount = roomHeadCount;
+    }
+
+    // 유틸리티 메서드 추가
+    public void addUser(User user) {
+        users.add(user);
+        user.setChatRoom(this);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+        user.setChatRoom(null);
     }
 }

@@ -272,12 +272,10 @@ async function setRoomHeadCount(roomId, status) {
 
     function success() {
         console.log('채팅방 인원 수 설정에 성공했습니다.');
-        alert('채팅방 인원 수 설정에 성공했습니다.');
     };
 
     function fail() {
         console.error('채팅방 인원 수 설정에 실패했습니다.');
-        alert('채팅방 인원 수 설정에 실패했습니다.');
     };
     await httpRequest('POST', '/chat/setHeadCount', body, success, fail);
 }
@@ -332,11 +330,63 @@ async function cancelMatch() {
         console.error('대기열 취소에 실패했습니다.', error);
     }
 }
-
 function showLanguageModal() {
     document.getElementById('languageModal').style.display = 'flex';
 }
 
 function closeLanguageModal() {
     document.getElementById('languageModal').style.display = 'none';
+}
+
+function openRatingModal() {
+    document.getElementById('ratingModal').style.display = 'block';
+}
+
+// 평가 모달 닫기 함수
+function closeRatingModal() {
+    document.getElementById('ratingModal').style.display = 'none';
+}
+
+// 평가 제출 함수
+async function submitRating(roomId) {
+    closeRatingModal()
+    let response = await fetch(`/chat/getParticipants?roomId=${roomId}`);
+    let participants = await response.json();
+    let raterUserEmail = document.getElementById('user_email').innerText;
+    let rating = document.getElementById('rating').value;
+    let ratedUserEmail = null;
+
+    participants.forEach(participant => {
+        if (participant !== raterUserEmail) {
+            ratedUserEmail = participant;
+        }
+    });
+
+    if (ratedUserEmail === null)
+        return;
+
+    let body = JSON.stringify({
+        ratedUserEmail: ratedUserEmail,
+        raterUserEmail: raterUserEmail,
+        rating: rating
+    });
+
+    try {
+        const response = await fetch('/chat/rateUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: body,
+        });
+
+        if (response.ok) {
+            closeRatingModal();
+            location.replace('/chat/chatList');
+        } else {
+            console.error('사용자 평가에 실패했습니다');
+        }
+    } catch (error) {
+        console.error('사용자 평가에 실패했습니다', error);
+    }
 }

@@ -2,10 +2,13 @@ package com.malrang.service;
 
 import com.malrang.dto.UserDto;
 import com.malrang.entity.User;
+import com.malrang.entity.UserRating;
+import com.malrang.repository.UserRatingRepository;
 import com.malrang.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -14,7 +17,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final UserRatingRepository userRatingRepository;
+    @Transactional
     public User update(UserDto.UpdateUserRequest dto) throws Exception {
         Optional<User> optionalUser = userRepository.findByEmail(dto.getEmail());
         if (optionalUser.isPresent()) {
@@ -32,14 +36,33 @@ public class UserService {
             throw new Exception("User not found");
         }
     }
-
+    @Transactional
     public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
-
+    @Transactional
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+    }
+
+    @Transactional
+    public void rateUser(String ratedUserEmail, String raterUserEmail, Double rating) {
+        User ratedUser = userRepository.findByEmail(ratedUserEmail)
+                .orElseThrow(() -> new RuntimeException("Rated user not found"));
+        User raterUser = userRepository.findByEmail(raterUserEmail)
+                .orElseThrow(() -> new RuntimeException("Rater user not found"));
+
+        UserRating userRating = UserRating.builder()
+                .ratedUser(ratedUser)
+                .raterUser(raterUser)
+                .rating(rating)
+                .build();
+
+        userRatingRepository.save(userRating);
+
+        ratedUser.updateAverageRating();
+        userRepository.save(ratedUser);
     }
 }

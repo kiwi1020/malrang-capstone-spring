@@ -1,7 +1,5 @@
 package com.malrang.dto;
 
-import com.malrang.entity.Article;
-import com.malrang.entity.ChatRoom;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
