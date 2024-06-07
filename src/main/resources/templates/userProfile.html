@@ -89,6 +89,14 @@
             font-size: 16px;
             flex: 1;
         }
+
+        #user_rating {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 <body onload="userInfo()">
@@ -117,6 +125,12 @@
             <label for="user_name">Nickname:</label>
                 <input type="text" id="user_name">
         </div>
+
+        <div class="profile-item">
+            <label for="user_rating">Rating:</label>
+            <div id="user_rating">4.5</div>
+        </div>
+
     </div>
     <button id="edit-btn" onclick="updateUserInfo()">Edit</button>
 </div>

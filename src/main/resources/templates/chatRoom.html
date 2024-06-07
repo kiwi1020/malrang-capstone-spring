@@ -17,15 +17,20 @@
     <div class="inputArea">
         <input type="text" placeholder="메시지를 입력하세요." class="content">
         <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">Send</button>
-        <button type="button" value="방나가기" class="quit" onclick="openRatingModal()">Quit</button>
+        <button type="button" value="방나가기" class="quit" onclick="quit()">Quit</button>
     </div>
 
     <!-- 평가 모달 -->
     <div id="ratingModal" class="modal">
         <div class="modal-content">
-            <h2>사용자 평가</h2>
-            <label for="rating">평점:</label>
-            <input type="number" id="rating" min="1" max="5"><br>
+            <h2>이번 채팅에서의 상대방의 매너 지수를 평가해주세요!</h2>
+            <fieldset>
+                <input type="radio" name="rating" value="5" id="rate1"><label for="rate1">⭐</label>
+                <input type="radio" name="rating" value="4" id="rate2"><label for="rate2">⭐</label>
+                <input type="radio" name="rating" value="3" id="rate3"><label for="rate3">⭐</label>
+                <input type="radio" name="rating" value="2" id="rate4"><label for="rate4">⭐</label>
+                <input type="radio" name="rating" value="1" id="rate5"><label for="rate5">⭐</label>
+            </fieldset>
             <button type="button" onclick="submitRating(urlParams.get('roomId'))">Submit</button>
         </div>
     </div>
@@ -65,18 +70,16 @@
         let msgArea = document.querySelector('.msgArea');
         let newMsg = document.createElement('div');
 
-        if (data.type === "ENTER" || data.type === 'QUIT')  {
+        if (data.type === "ENTER" || data.type === 'QUIT') {
             newMsg.innerText = data.message;
         } else if (data.type === "TALK") {
             // 본인의 메시지와 타인의 메시지를 구분하여 스타일을 추가합니다.
             newMsg.innerText = data.sender + ': ' + data.msg;
             if (data.sender === document.getElementById('user_name').innerText) {
                 newMsg.classList.add('ownMessage');
-            }
-            else if (data.sender === "GPT"){
+            } else if (data.sender === "GPT") {
                 newMsg.classList.add('gptMessage');
-            }
-            else {
+            } else {
                 newMsg.classList.add('otherMessage');
             }
         }
@@ -104,11 +107,15 @@
         if (isOffensive === true) {
             talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": "*****"};
             socket.send(JSON.stringify(talkMsg));
-            talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": "GPT", "msg": "An offensive message has been detected."};
+            talkMsg = {
+                "type": "TALK",
+                "roomId": urlParams.get('roomId'),
+                "sender": "GPT",
+                "msg": "An offensive message has been detected."
+            };
             socket.send(JSON.stringify(talkMsg));
-            return ;
-        }
-        else {
+            return;
+        } else {
             talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": content};
             socket.send(JSON.stringify(talkMsg));
         }
@@ -131,9 +138,7 @@
         // JSON 형태로 메시지를 전송하고 연결을 종료합니다.
         socket.send(JSON.stringify(quitMsg));
         socket.close();
-        await setRoomHeadCount(urlParams.get('roomId'), 'quit');
-        // 채팅방 목록 페이지로 이동합니다.
-        location.href = "/chat/chatList";
+        openRatingModal();
     }
 </script>
 

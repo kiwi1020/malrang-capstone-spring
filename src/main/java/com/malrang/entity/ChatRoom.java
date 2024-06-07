@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Entity
 public class ChatRoom {
 
     @Id
@@ -35,7 +35,7 @@ public class ChatRoom {
     @Column(name = "roomHeadCount")
     private Long roomHeadCount;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // 수정 필요
     private List<User> users = new ArrayList<>();
 
     public void setRoomHeadCount(Long newHeadCount) {

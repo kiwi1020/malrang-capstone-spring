@@ -50,6 +50,7 @@ public class testController {
         response.put("userEmail", userEmail);
         response.put("userName", user.getNickname());
         response.put("userLanguages", user.getLanguage());
+        response.put("userRating", user.getAverageRating());
         return ResponseEntity.ok(response);
     }
     @PostMapping("/userInfo/update")

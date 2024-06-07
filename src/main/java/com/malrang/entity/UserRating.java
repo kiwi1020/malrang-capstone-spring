@@ -20,7 +20,7 @@ public class UserRating {
     private User ratedUser; // 평점을 받은 사용자
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rater_user_id", nullable = false)
+    @JoinColumn(name = "rater_user_id", nullable = true)
     private User raterUser; // 평점을 준 사용자
 
     @Column(name = "rating", nullable = false)

@@ -53,7 +53,7 @@ public class ChatService {
     }
 
     @Transactional
-    public void addChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount)  {
+    public void addChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount) {
 
         Optional<ChatRoom> existingRoom = chatRoomRepository.findByRoomId(roomId);
         if (existingRoom.isPresent()) {
@@ -70,9 +70,10 @@ public class ChatService {
         chatRoomRepository.save(chatRoom);
 
     }
+
     public List<ChatDto.ChatRoom> findAllRoom() {
         return chatRoomRepository.findAll().stream()
-                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(),chat.getRoomLanguage(), chat.getRoomLevel(), chat.getRoomHeadCount() ))
+                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(), chat.getRoomLanguage(), chat.getRoomLevel(), chat.getRoomHeadCount()))
                 .collect(Collectors.toList());
     }
 
@@ -84,7 +85,7 @@ public class ChatService {
         String level = (roomLevel == null) ? "" : roomLevel;
 
         return chatRoomRepository.findByRoomNameContainingAndRoomLanguageContainingAndRoomLevelContaining(name, language, level).stream()
-                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(),chat.getRoomLanguage(), chat.getRoomLevel() ,chat.getRoomHeadCount()))
+                .map(chat -> new ChatDto.ChatRoom(chat.getRoomId(), chat.getRoomName(), chat.getRoomLanguage(), chat.getRoomLevel(), chat.getRoomHeadCount()))
                 .collect(Collectors.toList());
     }
 
@@ -99,7 +100,7 @@ public class ChatService {
 
         // 현재 인원수를 가져와서 1을 증가시킵니다.
         Long currentHeadCount = (chatRoom.getRoomHeadCount());
-        Long newHeadCount = status.equals("join") ?  currentHeadCount + 1 : currentHeadCount - 1;
+        Long newHeadCount = status.equals("join") ? currentHeadCount + 1 : currentHeadCount - 1;
 
         // 새로운 인원수를 저장합니다.
         chatRoom.setRoomHeadCount(newHeadCount);
@@ -108,12 +109,15 @@ public class ChatService {
         if (status.equals("join")) {
             User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new Exception("User doesn't exist"));
             chatRoom.addUser(user);
-        } else if (status.equals("quit")) {
-            User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new Exception("User doesn't exist"));
-            chatRoom.removeUser(user);
         }
-        // 변경사항을 저장합니다.
         chatRoomRepository.save(chatRoom);
+
+//db 재설계
+//        if (newHeadCount == 0) {
+//            chatRoomRepository.delete(chatRoom);
+//        } else {
+//            chatRoomRepository.save(chatRoom);
+//        }
     }
 
     @Transactional

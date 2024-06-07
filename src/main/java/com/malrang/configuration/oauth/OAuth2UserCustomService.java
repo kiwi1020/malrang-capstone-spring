@@ -39,6 +39,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                         .email(email)
                         .nickname(name)
                         .language("korean")
+                        .averageRating(0.0)
                         .build());
         return userRepository.save(user);
     }

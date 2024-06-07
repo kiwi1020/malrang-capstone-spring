@@ -45,11 +45,12 @@ public class User implements UserDetails {
     private ChatRoom chatRoom;
 
     @Builder
-    public User(String email, String password, String nickname, String language) {
+    public User(String email, String password, String nickname, String language, Double averageRating) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.language = language;
+        this.averageRating = averageRating;
     }
 
     public User update(String nickname) {

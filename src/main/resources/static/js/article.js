@@ -165,7 +165,7 @@ function userInfo(callback) {
         let userNameElement = document.getElementById('user_name');
         let userEmailElement = document.getElementById('user_email');
         let userLanguageElement = document.getElementById('user_language');
-
+        let userRatingElement = document.getElementById('user_rating');
         if (userNameElement) {
             userNameElement.innerText = json.userName;
             userNameElement.value = json.userName;
@@ -177,6 +177,8 @@ function userInfo(callback) {
         if (userLanguageElement)
             userLanguageElement.innerText = json.userLanguages;
 
+        if (userRatingElement)
+            userRatingElement.innerText = json.userRating;
 
         console.log(json.userName + '사용자 정보를 가져오는데 성공했습니다.');
 
@@ -264,7 +266,6 @@ function filterRooms() {
 }
 
 async function setRoomHeadCount(roomId, status) {
-
     let body = JSON.stringify({
         roomId: roomId,
         status: status
@@ -353,17 +354,22 @@ async function submitRating(roomId) {
     let response = await fetch(`/chat/getParticipants?roomId=${roomId}`);
     let participants = await response.json();
     let raterUserEmail = document.getElementById('user_email').innerText;
-    let rating = document.getElementById('rating').value;
+    let rating = document.querySelector('input[name="rating"]:checked').value;
     let ratedUserEmail = null;
 
+    await setRoomHeadCount(roomId, 'quit');
+
+    // 채팅방 목록 페이지로 이동합니다.
     participants.forEach(participant => {
         if (participant !== raterUserEmail) {
             ratedUserEmail = participant;
         }
     });
 
-    if (ratedUserEmail === null)
+    if (ratedUserEmail === null) {
+        location.replace('/chat/chatList');
         return;
+    }
 
     let body = JSON.stringify({
         ratedUserEmail: ratedUserEmail,
