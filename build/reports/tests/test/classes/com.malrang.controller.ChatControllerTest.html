@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - ChatControllerTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>ChatControllerTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.malrang.controller.html">com.malrang.controller</a> &gt; ChatControllerTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">3</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1.038s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testChatList()</td>
+<td class="success">0.987s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testChatListByFilter()</td>
+<td class="success">0.034s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testChatRoom()</td>
+<td class="success">0.017s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>22:30:39.945 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.malrang.controller.ChatControllerTest]: ChatControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:30:40.140 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.malrang.MalrangApplication for test class com.malrang.controller.ChatControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.1.4)
+
+2024-09-04T22:30:40.611+09:00  INFO 8820 --- [    Test worker] c.malrang.controller.ChatControllerTest  : Starting ChatControllerTest using Java 18.0.2.1 with PID 8820 (started by tpc7 in C:\git\malrang)
+2024-09-04T22:30:40.612+09:00  INFO 8820 --- [    Test worker] c.malrang.controller.ChatControllerTest  : The following 1 profile is active: &quot;oauth&quot;
+2024-09-04T22:30:41.674+09:00  INFO 8820 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-04T22:30:41.951+09:00  INFO 8820 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 266 ms. Found 4 JPA repository interfaces.
+2024-09-04T22:30:45.779+09:00  INFO 8820 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 0 (http)
+2024-09-04T22:30:45.801+09:00  INFO 8820 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-09-04T22:30:45.802+09:00  INFO 8820 --- [    Test worker] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.13]
+2024-09-04T22:30:46.029+09:00  INFO 8820 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-09-04T22:30:46.031+09:00  INFO 8820 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5395 ms
+2024-09-04T22:30:46.283+09:00  INFO 8820 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-04T22:30:46.413+09:00  INFO 8820 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.9.Final
+2024-09-04T22:30:46.418+09:00  INFO 8820 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2024-09-04T22:30:46.712+09:00  INFO 8820 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2024-09-04T22:30:46.728+09:00  INFO 8820 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-04T22:30:46.751+09:00  INFO 8820 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-09-04T22:30:46.972+09:00  INFO 8820 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6127ef86
+2024-09-04T22:30:46.976+09:00  INFO 8820 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-09-04T22:30:47.449+09:00  INFO 8820 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2024-09-04T22:30:48.242+09:00  INFO 8820 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-09-04T22:30:48.567+09:00  INFO 8820 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-04T22:30:52.100+09:00  INFO 8820 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3f7d20c5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@142f0ac1, org.springframework.security.web.context.SecurityContextHolderFilter@4bb4adf7, org.springframework.security.web.header.HeaderWriterFilter@1abacff3, org.springframework.security.web.authentication.logout.LogoutFilter@28d48616, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@cf6a6eb, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@33c5d3e, com.malrang.configuration.jwt.TokenAuthenticationFilter@d1b9dd7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@38e46ea, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3d1b6816, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1847da64, org.springframework.security.web.session.SessionManagementFilter@6f66ab8f, org.springframework.security.web.access.ExceptionTranslationFilter@77fa509a, org.springframework.security.web.access.intercept.AuthorizationFilter@4ff7de80]
+2024-09-04T22:30:52.108+09:00  WARN 8820 --- [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Mvc [pattern='/img/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-09-04T22:30:52.108+09:00  INFO 8820 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Mvc [pattern='/img/**']
+2024-09-04T22:30:52.109+09:00  WARN 8820 --- [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Mvc [pattern='/css/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-09-04T22:30:52.109+09:00  INFO 8820 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Mvc [pattern='/css/**']
+2024-09-04T22:30:52.109+09:00  WARN 8820 --- [    Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Mvc [pattern='/js/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-09-04T22:30:52.109+09:00  INFO 8820 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure Mvc [pattern='/js/**']
+2024-09-04T22:30:52.920+09:00  INFO 8820 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 53109 (http) with context path ''
+2024-09-04T22:30:52.939+09:00  INFO 8820 --- [    Test worker] c.malrang.controller.ChatControllerTest  : Started ChatControllerTest in 12.628 seconds (process running for 14.211)
+2024-09-04T22:30:53.830+09:00  INFO 8820 --- [o-auto-1-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-09-04T22:30:53.830+09:00  INFO 8820 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-09-04T22:30:53.831+09:00  INFO 8820 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.6</a> at 2024. 9. 4. 오후 10:30:56</p>
+</div>
+</div>
+</body>
+</html>
