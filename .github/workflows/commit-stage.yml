@@ -5,6 +5,9 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      security-events: write
     services:
       mysql:
         image: mysql:8.0
