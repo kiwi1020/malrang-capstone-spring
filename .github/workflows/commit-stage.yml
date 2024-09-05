@@ -13,13 +13,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set Up MySQL
-          uses: samin/mysql-action@v1
-          with:
-            host port: 3306
-            container port: 3306
-            mysql database: 'test_db'
-            mysql password: '1248'
-            mysql user: 'root'
+        uses: samin/mysql-action@v1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql database: 'test_db'
+          mysql password: '1248'
+          mysql user: 'root'
 
       - name: Set up JDK
         uses: actions/setup-java@v4
