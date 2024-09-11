@@ -1,3 +1,12 @@
+name: Commit Stage
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
     name: Build and Test
@@ -40,10 +49,3 @@ jobs:
           sarif_file: ${{ steps.scan.outputs.sarif }}
 
       - name: Build, unit tests and integration tests
-        env:
-          CHAT_GPT_API_KEY: ${{ secrets.CHAT_GPT_API_KEY }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-        run: |
-          chmod +x gradlew
-          ./gradlew build
