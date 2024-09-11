@@ -1,6 +1,3 @@
-name: Commit Stage
-on: push
-
 jobs:
   build:
     name: Build and Test
@@ -15,14 +12,10 @@ jobs:
       - name: Set Up MySQL
         uses: samin/mysql-action@v1
         with:
-          host port: 3306
-          container port: 3306
-          character set server: 'utf8'
-          mysql version: '8.0'
-          mysql database: 'test_db'
-          mysql password: '1248'
-          mysql user: 'root'
-          network mode: 'bridge'  # 네트워크 모드를 설정하여 MySQL 컨테이너의 이름을 사용할 수 있게 함
+          mysql_version: '8.0'
+          mysql_database: 'test_db'
+          mysql_password: '1248'
+          mysql_user: 'root'
 
       - name: Set up JDK
         uses: actions/setup-java@v4
