@@ -15,6 +15,7 @@ jobs:
       - name: Set Up MySQL
         uses: samin/mysql-action@v1
         with:
+
           host port: 3306
           container port: 3306
           character set server: 'utf8'
