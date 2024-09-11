@@ -1,11 +1,5 @@
 name: Commit Stage
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
   build:
@@ -21,10 +15,14 @@ jobs:
       - name: Set Up MySQL
         uses: samin/mysql-action@v1
         with:
-          mysql_version: '8.0'
-          mysql_database: 'test_db'
-          mysql_password: '1248'
-          mysql_user: 'root'
+
+#          host port: 3306
+#          container port: 3306
+#          character set server: 'utf8'
+          mysql version: '8.0'
+          mysql database: 'test_db'
+          mysql password: '1248'
+          mysql user: 'root'
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -49,3 +47,10 @@ jobs:
           sarif_file: ${{ steps.scan.outputs.sarif }}
 
       - name: Build, unit tests and integration tests
+        env:
+          CHAT_GPT_API_KEY: ${{ secrets.CHAT_GPT_API_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        run: |
+          chmod +x gradlew
+          ./gradlew build
