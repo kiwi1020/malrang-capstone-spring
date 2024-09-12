@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malrang Malrang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        input[type="text"],
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            background-color: #fff;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        td {
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        a:hover {
+            color: #007bff;
+        }
+
+        .room-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .room-name {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .profile-link {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .logout_link {
+            position: absolute;
+            top: 10px;
+            right: 100px;
+        }
+
+        .logout_link,
+        .profile-link {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .logout_link:hover,
+        .profile-link:hover {
+            color: #007bff;
+        }
+
+        .matching-button {
+            background-color: #28a745; /* 버튼 배경색 */
+            color: #fff; /* 버튼 텍스트 색상 */
+            border: none; /* 테두리 없음 */
+            border-radius: 5px; /* 버튼 모서리 둥글게 */
+            padding: 12px 20px; /* 내부 여백 */
+            cursor: pointer; /* 포인터 모양 커서 */
+            font-size: 16px; /* 텍스트 크기 */
+            transition: background-color 0.3s; /* 배경색 전환 효과 */
+            margin-top: 20px; /* 위쪽 여백 */
+            float: left; /* 왼쪽으로 이동 */
+        }
+
+        .alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            display: none;
+        }
+
+        .alert p {
+            margin: 0;
+        }
+
+        .alert button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .alert button:hover {
+            background-color: #c82333;
+        }
+
+        .modal {
+            display: none; /* 숨김 상태로 시작 */
+            position: fixed; /* 고정 위치 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .modal-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+
+        .modal-content button.close {
+            background-color: #dc3545;
+        }
+
+        .modal-content button.match {
+            background-color: #28a745;
+        }
+
+    </style>
+</head>
+<body onload="userInfo()">
+<div class="container">
+    <h1>Welcome to Malrang Malrang</h1>
+    <a href="/profile" class="profile-link">프로필 설정</a>
+    <a href="/logout" class="logout_link" onclick="localStorage.removeItem('access_token')">로그아웃</a>
+
+    <label for="roomName">
+        <input id="roomName" type="text" name="name" placeholder="채팅방 이름">
+    </label>
+
+    <label for="roomLanguage">
+        <select id="roomLanguage" name="language">
+            <option value="korean">Korean</option>
+            <option value="english">English</option>
+            <option value="chinese">Chinese</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+            <option value="japanese">Japanese</option>
+            <option value="hindi">Hindi</option>
+            <!-- 다른 언어들도 필요에 따라 추가할 수 있습니다 -->
+        </select>
+    </label>
+
+
+    <label for="roomLanguageLevel">
+        <select id="roomLanguageLevel" name="languageLevel">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+    </label>
+
+    <button onclick="createRoom()">방 만들기</button>
+    <button id="filterButton" onclick=filterRooms()>방 검색</button>
+    <button class="matching-button" onclick="showLanguageModal()">유저 매칭 시작</button>
+
+    <div class="alert" id="matchingMessage">
+        <p>매칭 중입니다. 잠시만 기다려주세요...</p>
+        <button onclick="cancelMatch()">매칭 취소</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th colspan="4">채팅방</th>
+        </tr>
+        <tr>
+            <td>방 이름</td>
+            <td style="width: 50%;">방 아이디</td>
+            <td>설정 언어</td>
+            <td>언어 수준</td>
+            <td>인원 수</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${roomList}">
+            <td>
+                <!-- 채팅방 목록 클릭 시 goToChatRoom() 함수 호출 -->
+                <div class="room-info">
+                    <a th:href="@{'/chat/chatRoom?roomId=' + ${room.roomId}}"
+                       th:text="${room.roomName}"></a>
+                </div>
+            </td>
+            <td th:text="${room.roomId}"></td>
+            <td th:text="${room.roomLanguage}"></td>
+            <td th:text="${room.roomLanguageLevel}"></td>
+            <td th:text="${room.roomHeadCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="languageModal">
+    <div class="modal-content">
+        <h2>채팅방에서 사용할 언어를 선택하세요</h2>
+        <select id="modalLanguage">
+            <option value="korean">Korean</option>
+            <option value="english">English</option>
+            <option value="chinese">Chinese</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+            <option value="japanese">Japanese</option>
+        </select>
+        <button class="match" onclick="matchUsers()">매칭 시작</button>
+        <button class="close" onclick="closeLanguageModal()">취소</button>
+    </div>
+</div>
+
+<script src="/js/article.js"></script>
+<script src="/js/token.js"></script>
+</body>
+</html>

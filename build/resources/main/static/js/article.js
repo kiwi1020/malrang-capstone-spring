@@ -189,7 +189,7 @@ function userInfo(callback) {
 
     function fail() {
         console.error('사용자 정보를 가져오는데 실패했습니다.');
-        alert('로그인이 필요한 서비스입니다.');
+        alert('This service requires login.');
         window.location.href = "/login";
     };
     // HTTP 요청 보내기
