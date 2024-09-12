@@ -13,7 +13,7 @@
     <header id="header" class="alt">
         <nav id="nav">
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="/chat/chatList">Home</a></li>
                 <li><a href="/profile">Profile Settings</a></li>
                 <li><a href="/logout" class="button">Sign Out</a></li>
             </ul>
@@ -97,6 +97,27 @@
             <span class="image featured"><img src="/img/pic01.jpg" alt=""/></span>
         </section>
     </section>
+
+    <div class="modal" id="languageModal">
+        <div class="modal-content">
+            <h4>Please select the language to use in the chat room.</h4>
+            <select id="modalLanguage">
+                <option value="korean">Korean</option>
+                <option value="english">English</option>
+                <option value="chinese">Chinese</option>
+                <option value="spanish">Spanish</option>
+                <option value="french">French</option>
+                <option value="japanese">Japanese</option>
+            </select>
+            <button class="match" onclick="matchUsers()">Start Matching</button>
+            <button class="close" onclick="closeLanguageModal()">Cancel Matching</button>
+        </div>
+    </div>
+
+    <div class="alert" id="matchingMessage">
+        <p>Matching in progress. Please wait a moment...</p>
+        <button onclick="cancelMatch()">Cancel Matching</button>
+    </div>
 
 </div>
 <script src="/js/article.js"></script>

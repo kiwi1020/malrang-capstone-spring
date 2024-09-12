@@ -13,13 +13,11 @@ function createRoom() {
     // 성공 및 실패 시 실행할 콜백 함수 정의
     function success() {
         console.log('채팅방 생성에 성공했습니다.');
-        alert('채팅방 생성에 성공했습니다.');
         location.replace('/chat/chatList');
     };
 
     function fail() {
         console.error('채팅방 생성에 실패했습니다.');
-        alert('채팅방 생성에 실패했습니다.');
     };
     // HTTP 요청 보내기
     httpRequest('POST', '/chat/createRoom', body, success, fail);

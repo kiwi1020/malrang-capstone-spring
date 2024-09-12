@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/css/chatRoom.css">
+    <link rel="stylesheet" href="/css/main.css"/>
 </head>
 <body>
 <div id="user_email" style="display: none"></div>
@@ -15,15 +15,15 @@
         <div class="msgArea"></div>
     </div>
     <div class="inputArea">
-        <input type="text" placeholder="메시지를 입력하세요." class="content">
+        <input type="text" placeholder="Enter your message." class="content">
         <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">Send</button>
         <button type="button" value="방나가기" class="quit" onclick="quit()">Quit</button>
     </div>
 
     <!-- 평가 모달 -->
-    <div id="ratingModal" class="modal">
-        <div class="modal-content">
-            <h2>이번 채팅에서의 상대방의 매너 지수를 평가해주세요!</h2>
+    <div id="ratingModal" class="rating">
+        <div class="rating-content">
+            <h2>Rate your chat partner's manners!</h2>
             <fieldset>
                 <input type="radio" name="rating" value="5" id="rate1"><label for="rate1">⭐</label>
                 <input type="radio" name="rating" value="4" id="rate2"><label for="rate2">⭐</label>
