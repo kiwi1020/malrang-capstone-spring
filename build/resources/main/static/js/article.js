@@ -1,4 +1,4 @@
-function createRoom() {
+async function createRoom() {
     let roomName = document.getElementById('roomName').value;
     let roomLanguage = document.getElementById('roomLanguage');
     let roomLanguageLevel = document.getElementById('roomLanguageLevel');
@@ -11,16 +11,17 @@ function createRoom() {
     });
 
     // 성공 및 실패 시 실행할 콜백 함수 정의
-    function success() {
+    function success(response) {
         console.log('채팅방 생성에 성공했습니다.');
-        location.replace('/chat/chatList');
+        let roomId = response.roomId; // 서버에서 받은 roomId
+        window.location.href = "/chat/chatRoom?roomId=" + roomId; // 해당 방으로 이동
     };
 
     function fail() {
         console.error('채팅방 생성에 실패했습니다.');
     };
     // HTTP 요청 보내기
-    httpRequest('POST', '/chat/createRoom', body, success, fail);
+    await httpRequest('POST', '/chat/createRoom', body, success, fail);
 }
 
 
@@ -88,10 +89,10 @@ async function httpRequest(method, url, body, success, fail) {
     }
 }
 
-async function translateMessage(message, roomId, language) {
+async function translateMessage(message, roomId, userLanguage) {
     try {
         let body;
-        switch (language) {
+        switch (userLanguage) {
             case "korean":
                 body = JSON.stringify({
                     question: message + ".란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
@@ -355,7 +356,7 @@ async function submitRating(roomId) {
     let rating = document.querySelector('input[name="rating"]:checked').value;
     let ratedUserEmail = null;
 
-    await setRoomHeadCount(roomId, 'quit');
+    // await setRoomHeadCount(roomId, 'quit');
 
     // 채팅방 목록 페이지로 이동합니다.
     participants.forEach(participant => {

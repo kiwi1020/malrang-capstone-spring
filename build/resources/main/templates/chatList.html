@@ -79,14 +79,19 @@
                 <tr th:each="room : ${roomList}">
                     <td>
                         <div class="room-info">
-                            <a th:href="@{'/chat/chatRoom?roomId=' + ${room.roomId}}"
+                            <!-- 방이 꽉 차지 않았을 때만 링크를 활성화 -->
+                            <a th:if="${room.roomHeadCount < 2}"
+                               th:href="@{'/chat/chatRoom?roomId=' + ${room.roomId}}"
                                th:text="${room.roomName}"></a>
+                            <!-- 방이 꽉 찼을 때 링크를 비활성화 -->
+                            <span th:if="${room.roomHeadCount >= 2}"
+                                  th:text="${room.roomName}"></span>
                         </div>
                     </td>
                     <td th:text="${room.roomId}"></td>
                     <td th:text="${room.roomLanguage}"></td>
                     <td th:text="${room.roomLanguageLevel}"></td>
-                    <td th:text="${room.roomHeadCount}"></td>
+                    <td th:text="${room.roomHeadCount >= 2 ? 'full' : room.roomHeadCount}"></td>
                 </tr>
                 </tbody>
             </table>
