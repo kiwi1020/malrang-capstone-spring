@@ -34,7 +34,8 @@ public class testController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomId",room.getRoomId());
-        return ResponseEntity.ok(response);  //만든사람이 채팅방 1빠로 들어가게 됩니다
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/userInfo")

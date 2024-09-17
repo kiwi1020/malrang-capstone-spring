@@ -12,6 +12,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -52,10 +53,14 @@ public class WebSockChatHandler extends TextWebSocketHandler {
     private void sendToEachSocket(Set<WebSocketSession> sessions, TextMessage message) {
         synchronized (sessions) {
             for (WebSocketSession roomSession : sessions) {
-                try {
-                    roomSession.sendMessage(message);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (roomSession.isOpen()) {  // 세션이 열려 있는지 확인
+                    try {
+                        roomSession.sendMessage(message);
+                    } catch (IOException e) {
+                        log.error("Error sending message to session {}", roomSession.getId(), e);
+                    }
+                } else {
+                    log.warn("Attempted to send message to closed session: {}", roomSession.getId());
                 }
             }
         }
@@ -63,8 +68,7 @@ public class WebSockChatHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        //javascript에서  session.close해서 연결 끊음. 그리고 이 메소드 실행.
-        //session은 연결 끊긴 session을 매개변수로 이거갖고 뭐 하세요.... 하고 제공해주는 것 뿐
+        chatService.deleteRoom();
     }
 
 

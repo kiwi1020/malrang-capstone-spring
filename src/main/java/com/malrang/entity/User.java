@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private List<UserRating> ratings = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_room_id")
+    @JoinColumn(name = "chat_room_id", nullable = true)
     private ChatRoom chatRoom;
 
     @Builder
@@ -102,5 +102,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
     }
 }

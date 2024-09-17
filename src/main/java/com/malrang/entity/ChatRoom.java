@@ -35,8 +35,9 @@ public class ChatRoom {
     @Column(name = "roomHeadCount")
     private Long roomHeadCount;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // 수정 필요
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
+
 
     public void setRoomHeadCount(Long newHeadCount) {
         this.roomHeadCount = newHeadCount;

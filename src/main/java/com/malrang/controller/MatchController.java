@@ -17,7 +17,7 @@ import java.security.Principal;
 @RestController
 public class MatchController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MatchController.class);
     @Autowired
     private MatchService matchService;
 

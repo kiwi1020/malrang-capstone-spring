@@ -1135,7 +1135,7 @@ header.major p {
 
 /* User's message alignment */
 .ownMessage {
-	background: linear-gradient(to right, #E1E1E1FF, #d97b65); /* 고급스러운 그라데이션 배경 */
+	background: linear-gradient(to right, #333, #555); /* 검정 계열의 그라데이션 배경 */
 	color: #fff;
 	border-radius: 10px;
 	padding: 10px;
@@ -1145,9 +1145,8 @@ header.major p {
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* 메시지 박스에 부드러운 음영 추가 */
 }
 
-/* Other users' messages alignment */
 .otherMessage {
-	background: linear-gradient(to right, #8AA4FFFF, #E1E1E1FF); /* 고급스러운 그라데이션 배경 */
+	background: linear-gradient(to right, #f0f0f0, #e0e0e0); /* 회색 계열의 그라데이션 배경 */
 	color: #333;
 	border-radius: 10px;
 	padding: 10px;
@@ -1159,7 +1158,7 @@ header.major p {
 
 /* GPT's message styling */
 .gptMessage {
-	background: linear-gradient(to right, #FFE49BFF, #E1E1E1FF); /* 고급스러운 그라데이션 배경 */
+	background: linear-gradient(to right, #FFE49BFF, #fae3aa); /* 고급스러운 그라데이션 배경 */
 	color: #333;
 	border-radius: 10px;
 	padding: 10px;

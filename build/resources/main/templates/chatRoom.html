@@ -41,6 +41,7 @@
 <script>
     // WebSocket 연결을 위한 변수
     let socket = new WebSocket("ws://localhost:8080/ws/chat");
+    // let socket = new WebSocket("ws://malrangmalrang.duckdns.org:8080/ws/chat");
     let urlParams = new URLSearchParams(window.location.search);
 
     // WebSocket 연결이 열렸을 때 실행되는 함수
@@ -100,8 +101,8 @@
     async function sendMsg() {
         let userName = document.getElementById('user_name').innerText;
         let content = document.querySelector('.content').value;
-        let language = document.getElementById('user_language').innerText;
-        let isOffensive = await detectAggressiveMessage(content, urlParams.get('roomId'), language);
+        let user_language = document.getElementById('user_language').innerText;
+        let isOffensive = await detectAggressiveMessage(content, urlParams.get('roomId'), user_language);
         let talkMsg = null;
 
         if (isOffensive === true) {
@@ -126,7 +127,7 @@
         translationButton.innerText = 'Grammar Check';
         translationButton.classList.add('translationButton');
         translationButton.onclick = function () {
-            translateMessage(content, urlParams.get('roomId'), language);
+            translateMessage(content, urlParams.get('roomId'), user_language);
         }
         messageArea.insertAdjacentElement('beforeend', translationButton); // 'beforeend' 위치에 버튼을 추가합니다.
     }
@@ -135,10 +136,24 @@
     async function quit() {
         let userName = document.getElementById('user_name').innerText;
         let quitMsg = {"type": "QUIT", "roomId": urlParams.get('roomId'), "sender": userName, "msg": ""};
-        // JSON 형태로 메시지를 전송하고 연결을 종료합니다.
+
+        // JSON 형태로 메시지를 전송하고 모달을 엽니다.
         socket.send(JSON.stringify(quitMsg));
-        socket.close();
         openRatingModal();
+
+        // Rating modal에서 평가가 제출될 때까지 대기합니다.
+        await new Promise(resolve => {
+            // 평가 모달의 Submit 버튼이 클릭될 때 resolve를 호출합니다.
+            document.querySelector('#ratingModal button').addEventListener('click', function handleSubmit() {
+                document.querySelector('#ratingModal button').removeEventListener('click', handleSubmit);
+                resolve();
+            }, { once: true });
+        });
+
+        // 평가가 제출된 후 소켓을 종료합니다.
+        setTimeout(() => {
+            socket.close();
+        }, 500);  //
     }
 </script>
 

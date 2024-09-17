@@ -10,6 +10,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -29,10 +30,6 @@ public class ChatService {
     private void init() {
         chatRooms = new LinkedHashMap<>();
     }
-
-   /* public List<ChatDto.ChatRoom> findAllRoom() {
-        return new ArrayList<>(chatRooms.values());
-    }*/
 
     public ChatDto.ChatRoom findRoomById(String roomId) {
         return chatRooms.get(roomId);
@@ -70,6 +67,40 @@ public class ChatService {
         chatRoomRepository.save(chatRoom);
 
     }
+
+    @Transactional
+    public void deleteRoom() {
+        // 방의 상태를 로그에 기록하여 확인합니다.
+        log.info("Starting room deletion process.");
+
+        // 삭제할 방의 ID 리스트를 가져옵니다.
+        List<String> roomsToDelete = chatRooms.values().stream()
+                .peek(room -> log.info("Checking room ID {} with sessions: {}", room.getRoomId(), room.getSessions()))
+                .filter(room -> room.getSessions().isEmpty())
+                .map(ChatDto.ChatRoom::getRoomId)
+                .toList();
+
+        // 삭제할 방이 있는지 로그를 추가하여 확인합니다.
+        log.info("Rooms to delete: {}", roomsToDelete);
+
+        for (String roomId : roomsToDelete) {
+            // 1. 채팅방 찾기
+            ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
+            if (chatRoom != null) {
+                // 2. 채팅방에 소속된 유저의 chatRoomId를 null로 설정
+                List<User> usersInRoom = userRepository.findByChatRoom(chatRoom);
+                for (User user : usersInRoom) {
+                    user.setChatRoom(null);
+                    userRepository.save(user);  // 변경 사항 저장
+                }
+
+                // 3. 채팅방 삭제
+                chatRooms.remove(roomId);
+                chatRoomRepository.delete(chatRoom);
+            }
+        }
+    }
+
 
     public List<ChatDto.ChatRoom> findAllRoom() {
         return chatRoomRepository.findAll().stream()
@@ -111,18 +142,16 @@ public class ChatService {
             chatRoom.addUser(user);
         }
         chatRoomRepository.save(chatRoom);
-
-//db 재설계
-//        if (newHeadCount == 0) {
-//            chatRoomRepository.delete(chatRoom);
-//        } else {
-//            chatRoomRepository.save(chatRoom);
-//        }
     }
 
     @Transactional
     public List<String> getParticipants(String roomId) throws Exception {
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElseThrow(() -> new Exception("room doesn't exist"));
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId)
+                .orElseGet(() -> {
+                    log.warn("Chat room with ID {} does not exist.", roomId);
+                    return null;
+                });
+
         List<String> emails = new ArrayList<>();
         for (User user : chatRoom.getUsers()) {
             emails.add(user.getEmail());
