@@ -4,7 +4,7 @@
     <title>Malrang Malrang</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/main.css?dt=20240918"/>
 </head>
 <body class="landing is-preload" onload="userInfo()">
 <div id="page-wrapper">
@@ -91,7 +91,7 @@
                     <td th:text="${room.roomId}"></td>
                     <td th:text="${room.roomLanguage}"></td>
                     <td th:text="${room.roomLanguageLevel}"></td>
-                    <td th:text="${room.roomHeadCount >= 2 ? 'full' : room.roomHeadCount}"></td>
+                    <td th:text="${room.roomHeadCount >= 2 ? 'Full' : room.roomHeadCount}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -125,7 +125,7 @@
     </div>
 
 </div>
-<script src="/js/article.js"></script>
+<script src="/js/article.js?testNm=1"></script>
 <script src="/js/token.js"></script>
 </body>
 </html>

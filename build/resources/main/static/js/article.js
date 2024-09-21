@@ -95,17 +95,17 @@ async function translateMessage(message, roomId, userLanguage) {
         switch (userLanguage) {
             case "korean":
                 body = JSON.stringify({
-                    question: message + ".란 문장이 영어 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
+                    question: message + ".란 문장이 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
                 });
                 break;
             case "japanese":
                 body = JSON.stringify({
-                    question: message + ".文章が英語の文法的に正しいか、私が尋ねた文章を入れて日本語で説明してくれ、もし正しくないなら、正しくない理由を詳しく説明してください."
+                    question: message + ".文が文法的に正しいかどうかを確認し、私が尋ねた文を入れて日本語で説明してください。もし文法が正しくない場合は、その理由を詳しく説明してください。"
                 });
                 break;
             case "chinese":
                 body = JSON.stringify({
-                    question: message + ".请用中文解释该句子的英语语法是否正确。如果不正确，请详细解释为什么不正确."
+                    question: message + ".请检查句子是否符合语法规则，并用中文解释我提问的句子。如果语法不正确，请详细说明原因."
                 });
                 break;
             case "english":
@@ -115,17 +115,12 @@ async function translateMessage(message, roomId, userLanguage) {
                 break;
             case "french":
                 body = JSON.stringify({
-                    question: message + ".Veuillez inclure la phrase que j'ai demandé si elle est grammaticalement correcte en anglais et l'expliquer en français. Si elle n'est pas correcte, veuillez expliquer en détail pourquoi elle est incorrecte."
+                    question: message + ".Veuillez vérifier si la phrase est grammaticalement correcte et expliquer en français la phrase que j'ai posée. Si la grammaire n'est pas correcte, veuillez expliquer en détail pourquoi."
                 });
                 break;
             case "spanish":
                 body = JSON.stringify({
-                    question: message + ".Por favor explique en español la oración que pregunté sobre si es gramaticalmente correcta en inglés, si no es correcta explique detalladamente por qué es incorrecta."
-                });
-                break;
-            case "hindi":
-                body = JSON.stringify({
-                    question: message + ".कृपया जांचें कि ऊपर पूछा गया वाक्य अंग्रेजी में व्याकरणिक रूप से सही है या नहीं। यदि कुछ गलत है तो कृपया हिंदी में बताएं कि वह गलत क्यों है और उसे सही वाक्य में सही करें।"
+                    question: message + ".Verifique si la oración es gramaticalmente correcta y explique en español la oración que he planteado. Si la gramática no es correcta, por favor explique en detalle el motivo."
                 });
                 break;
             default:
