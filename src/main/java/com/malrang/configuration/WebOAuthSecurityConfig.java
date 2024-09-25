@@ -56,6 +56,7 @@ public class WebOAuthSecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/token").permitAll()
+                        .requestMatchers("/api/friend/**").authenticated()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/chat/createRoom").authenticated()
                         .requestMatchers("/userInfo").authenticated()

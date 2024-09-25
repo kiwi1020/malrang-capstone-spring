@@ -187,7 +187,7 @@ function userInfo(callback) {
         window.location.href = "/login";
     };
     // HTTP 요청 보내기
-    httpRequest('POST', '/userInfo', null, success, fail);
+    httpRequest('POST', '/userInfo', null, success, fail)
 }
 
 function updateUserInfo() {
@@ -389,4 +389,37 @@ async function submitRating(roomId) {
     } catch (error) {
         console.error('사용자 평가에 실패했습니다', error);
     }
+}
+
+function loadFriendList() {
+    function success(friendListData) {
+        const friendListSection = document.getElementById('friend-list');
+        if (friendListSection.style.display === 'none' || friendListSection.style.display === '') {
+            friendListSection.style.display = 'block'; // 친구 목록 보이기
+            // 여기에 친구 목록을 불러오는 로직 추가
+        } else {
+            friendListSection.style.display = 'none'; // 친구 목록 숨기기
+        }
+
+        // let friendTableBody = document.getElementById('friendTable').querySelector('tbody');
+        // friendTableBody.innerHTML = ''; // 기존 데이터 초기화
+        //
+        // friendListData.forEach(friend => {
+        //     let row = document.createElement('tr');
+        //     row.innerHTML = `
+        //         <td>${friend.friendEmail}</td>
+        //         <td>${friend.status}</td>
+        //     `;
+        //     friendTableBody.appendChild(row);
+        // });
+        console.log(friendListData)
+    }
+
+    function fail() {
+        console.error('친구 목록을 가져오는데 실패했습니다.');
+        alert('친구 목록을 가져오는데 문제가 발생했습니다.');
+    }
+
+    // 친구 목록을 가져오는 HTTP 요청
+    httpRequest('GET', '/api/friend/request/getList', null, success, fail);
 }

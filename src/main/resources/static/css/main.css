@@ -1302,3 +1302,6 @@ header.major p {
 .msgArea::-webkit-scrollbar-track {
 	background: #f1f1f1; /* 스크롤바 배경 색상 */
 }
+#friend-list {
+	display: none; /* 기본적으로 숨김 */
+}
