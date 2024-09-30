@@ -13,10 +13,10 @@
     <header id="header" class="alt">
         <nav id="nav">
             <ul>
+                <li><a href="#" onclick="loadFriendList()">Friends List</a></li>
                 <li><a href="/chat/chatList">Home</a></li>
                 <li><a href="/profile">Profile Settings</a></li>
-                <li><a href="/logout" class="button">Sign Out</a></li>
-                <li class="button" onclick="loadFriendList()">Friends List</li>
+                <li><a href="#" class="button" onclick="logout()">Sign Out</a></li>
             </ul>
         </nav>
     </header>
@@ -33,7 +33,7 @@
         <!-- Create Room Modal -->
         <div class="create-container">
             <label for="roomName">
-                <input id="roomName" type="text" name="name" placeholder="Room Name">
+                <input id="roomName" type="text" name="name" placeholder="Room Name" required>
             </label>
 
             <label for="roomLanguage">
@@ -58,24 +58,64 @@
             </label>
         </div>
 
-        <!-- Friend List -->
-        <section id="friend-list" class="container">
-            <header class="major">
-                <h2>Your Friend List</h2>
-            </header>
-            <table id="friendTable">
-                <thead>
-                <tr>
-                    <th>Friend Email</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- 친구 목록이 여기에 동적으로 추가될 예정 -->
-                </tbody>
-            </table>
-        </section>
+        <section id="friend-management" class="container">
+            <!-- 메뉴 버튼 -->
+            <nav>
+                <ul id="menu">
+                    <li><button onclick="showSection('friend-list')">Friend List</button></li>
+                    <li><button onclick="showSection('friend-add')">Add Friend</button></li>
+                    <li><button onclick="showSection('friend-requests')">Friend Requests</button></li>
+                </ul>
+            </nav>
 
+            <!-- 친구 목록 섹션 -->
+            <section id="friend-list" class="section-content" style="display: none;">
+                <header class="major">
+                    <h2>Your Friend List</h2>
+                </header>
+                <table id="friendTable">
+                    <thead>
+                    <tr>
+                        <th>Friend Email</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 친구 목록이 여기에 동적으로 추가될 예정 -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 친구 추가 섹션 -->
+            <section id="friend-add" class="section-content" style="display: none;">
+                <header class="major">
+                    <h2>Add Friend by Email Address</h2>
+                </header>
+                <form id="addFriendForm" onsubmit="addFriend(event)">
+                    <label for="friendEmail">Friend's Email:</label>
+                    <input type="email" id="friendEmail" name="friendEmail" required>
+                    <button type="submit">Add Friend</button>
+                </form>
+            </section>
+
+            <!-- 친구 요청 섹션 -->
+            <section id="friend-requests" class="section-content" style="display: none;">
+                <header class="major">
+                    <h2>Pending Friend Requests</h2>
+                </header>
+                <table id="requestTable">
+                    <thead>
+                    <tr>
+                        <th>Requesting Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 요청 목록이 여기에 동적으로 추가될 예정 -->
+                    </tbody>
+                </table>
+            </section>
+        </section>
     </section>
 
     <!-- Main -->
@@ -143,7 +183,10 @@
     </div>
 
 </div>
-<script src="/js/article.js?testNm=1"></script>
+<script src="/js/userInfo.js?testNm=1"></script>
+<script src="/js/chatRoom.js?testNm=1"></script>
+<script src="/js/match.js?testNm=1"></script>
+<script src="/js/friendList.js?testNm=1"></script>
 <script src="/js/token.js"></script>
 </body>
 </html>

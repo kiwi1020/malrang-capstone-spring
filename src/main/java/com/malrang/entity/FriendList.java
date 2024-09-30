@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @RedisHash(value = "friendList")
@@ -16,7 +18,7 @@ public class FriendList {
 
     @Indexed
     @Getter
-    private Set<String> friends; // 친구 목록 (친구로 추가된 사용자들의 ID)
+    private Map<String, Boolean> friendStatuses; // 친구 이메일과 상태를 매핑
 
     @Indexed
     @Getter
@@ -26,12 +28,13 @@ public class FriendList {
     @Getter
     private Set<String> receivedRequests; // 내가 받은 친구 요청 목록
 
-    public FriendList() {
-    }
 
-    public FriendList(String email, Set<String> friends, Set<String> sentRequests, Set<String> receivedRequests) {
+    public FriendList() {
+
+    }
+    public FriendList(String email, Map<String, Boolean> friendStatuses, Set<String> sentRequests, Set<String> receivedRequests) {
         this.email = email;
-        this.friends = friends;
+        this.friendStatuses = friendStatuses;
         this.sentRequests = sentRequests;
         this.receivedRequests = receivedRequests;
     }
@@ -41,15 +44,14 @@ public class FriendList {
         this.email = email;
     }
 
-    public void setFriends(Set<String> friends) {
-        this.friends = friends;
+    public void setFriendStatuses(Map<String, Boolean> friendStatuses) {
+        this.friendStatuses = friendStatuses;
     }
 
     public void setSentRequests(Set<String> sentRequests) {
         this.sentRequests = sentRequests;
     }
 
-    public void setReceivedRequests(Set<String> receivedRequests) {
-        this.receivedRequests = receivedRequests;
-    }
+    public void setReceivedRequests(Set<String> receivedRequests) { this.receivedRequests = receivedRequests; }
+
 }

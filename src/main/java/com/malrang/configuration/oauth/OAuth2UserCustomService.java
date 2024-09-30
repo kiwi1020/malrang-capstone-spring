@@ -57,7 +57,8 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
             // 친구 목록을 Redis에 생성
             friendListService.createFriendList(email);
         }
-
+        // 로그인 상태를 온라인으로 업데이트
+        friendListService.updateUserStatus(email, true);
         // 사용자 저장
         return userRepository.save(user);
     }

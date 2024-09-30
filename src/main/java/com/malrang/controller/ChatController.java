@@ -3,41 +3,42 @@ package com.malrang.controller;
 import com.malrang.dto.ChatDto;
 import com.malrang.service.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-//restAPI 방식으로 바꿀 것
-@Controller
 @RequiredArgsConstructor
+@RestController
+@RequestMapping("/chat")
 public class ChatController {
     private final ChatService chatService;
 
+    @PostMapping("/createRoom")
+    public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomData, Principal principal) {
+        ChatDto.ChatRoom room = chatService.createRoom(roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel(), 0L);
+        chatService.addChatRoom(room.getRoomId(), roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel(), 0L);
 
-    @RequestMapping("/chat/chatList")
-    public String chatList(Model model) {
-        List<ChatDto.ChatRoom> roomList = chatService.findAllRoom();
-        model.addAttribute("roomList", roomList);
-        return "chatList";
+        Map<String, Object> response = new HashMap<>();
+        response.put("roomId", room.getRoomId());
+
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/chat/chatList/filterRooms")
-    public String chatListByFilter(Model model,
-                                   @RequestParam(value = "roomName", required = false) String roomName,
-                                   @RequestParam(value = "roomLanguage", required = false) String roomLanguage,
-                                   @RequestParam(value = "roomLanguageLevel", required = false) String roomLanguageLevel) {
-        List<ChatDto.ChatRoom> roomList = chatService.searchChatRoomsByFilter(roomName, roomLanguage, roomLanguageLevel);
-        model.addAttribute("roomList", roomList);
-        return "chatList";
+    @PostMapping("/setHeadCount")
+    public ResponseEntity setHeadCount(@RequestBody ChatDto.addHeadCount dto, Principal principal) throws Exception {
+        String userEmail = principal.getName();
+        chatService.setHeadCount(dto.getRoomId(), dto.getStatus(), userEmail);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/chat/chatRoom")
-    public String chatRoom() {
-        return "chatRoom";
+    @GetMapping("/getParticipants")
+    public ResponseEntity<List<String>> getParticipants(@RequestParam String roomId) throws Exception {
+        List<String> participants = chatService.getParticipants(roomId);
+        return ResponseEntity.ok(participants);
     }
-
 }

@@ -15,7 +15,7 @@
         <div class="msgArea"></div>
     </div>
     <div class="inputArea">
-        <input type="text" placeholder="Enter your message." class="content">
+        <input type="text" placeholder="Enter your message." class="content" id="messageInput">
         <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">Send</button>
         <button type="button" value="방나가기" class="quit" onclick="quit()">Quit</button>
     </div>
@@ -37,7 +37,10 @@
 
 </div>
 
-<script src="/js/article.js?testNm=1"></script>
+<script src="/js/userInfo.js?testNm=1"></script>
+<script src="/js/rating.js?testNm=1"></script>
+<script src="/js/chatRoom.js?testNm=1"></script>
+
 <script>
     // WebSocket 연결을 위한 변수
     let socket = new WebSocket("ws://localhost:8080/ws/chat");
@@ -121,7 +124,6 @@
             socket.send(JSON.stringify(talkMsg));
         }
 
-
         let messageArea = document.querySelector('.msgArea');
         let translationButton = document.createElement('button');
         translationButton.innerText = 'Grammar Check';
@@ -130,6 +132,7 @@
             translateMessage(content, urlParams.get('roomId'), user_language);
         }
         messageArea.insertAdjacentElement('beforeend', translationButton); // 'beforeend' 위치에 버튼을 추가합니다.
+        document.getElementById('messageInput').value='';
     }
 
     // 채팅방 나가기 함수

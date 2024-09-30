@@ -1302,6 +1302,178 @@ header.major p {
 .msgArea::-webkit-scrollbar-track {
 	background: #f1f1f1; /* 스크롤바 배경 색상 */
 }
-#friend-list {
-	display: none; /* 기본적으로 숨김 */
+
+
+/* 메뉴 스타일 */
+#menu {
+	list-style: none; /* 기본 목록 스타일 제거 */
+	padding: 0; /* 패딩 제거 */
+	margin: 0; /* 마진 제거 */
+	display: flex; /* 플렉스박스를 이용하여 수평 정렬 */
 }
+
+#menu li {
+	margin-right: 10px; /* 버튼 사이의 간격 */
+}
+
+#menu button {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	-moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+	background-color: #666; /* 배경 색상 */
+	border-radius: 6px; /* 모서리 둥글게 */
+	border: none; /* 경계선 제거 */
+	color: #ffffff; /* 텍스트 색상 */
+	cursor: pointer; /* 마우스 포인터 */
+	padding: 0 1em; /* 패딩 */
+	height: 3em; /* 높이 */
+	line-height: 3em; /* 수직 정렬을 위한 라인 높이 */
+	font-weight: 500; /* 글자 두께 */
+	white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+	margin-left: 1em;
+	font-size: 10px;
+}
+
+#menu button:hover {
+	background-color: #737373; /* hover 상태의 배경 색상 */
+}
+
+#menu button:active {
+	background-color: #595959; /* 클릭 상태의 배경 색상 */
+}
+
+/* 사이드 메뉴 스타일 */
+#friend-management {
+	position: fixed;       /* 고정된 위치 */
+	left: 0;               /* 화면의 왼쪽에 고정 */
+	top: 0;                /* 화면의 위쪽에 고정 */
+	width: 330px;          /* 너비를 고정 */
+	height: 600px;         /* 화면 전체 높이 */
+	background-color: #f4f4f4; /* 배경색 */
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
+	padding: 20px;         /* 내부 여백 */
+	z-index: 1000;         /* 다른 요소들 위에 배치 */
+	overflow-y: auto;      /* 목록이 길어지면 스크롤 */
+	display: none; /* 기본적으로 숨김 */
+	border-radius: 20px
+}
+
+#friend-management h2 {
+	font-size: 24px;
+	margin-bottom: 20px;
+	color: black;
+}
+
+#friendTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#friendTable th, #friendTable td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+#friendTable th {
+	background-color: #f0f0f0;
+}
+
+#friendTable tbody tr:hover {
+	background-color: #f9f9f9;
+}
+
+/* 친구 추가 입력 필드 스타일 */
+#friendEmail {
+	width: 70%; /* 너비를 100%로 설정하여 전체 영역 사용 */
+	padding: 0.5em; /* 위아래 패딩 */
+	border-radius: 6px; /* 모서리 둥글게 */
+	border: 1px solid #ccc; /* 연한 회색 테두리 */
+	font-size: 1em; /* 폰트 크기 */
+	box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
+	transition: border-color 0.2s ease-in-out; /* 테두리 색상 변화 효과 */
+}
+
+/* 포커스 시 테두리 색상 변화 */
+#friendEmail:focus {
+	border-color: #666; /* 포커스 시 테두리 색상 변경 */
+	outline: none; /* 기본 포커스 아웃라인 제거 */
+}
+
+/* 친구 추가 버튼 스타일 */
+#friendEmail + button {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	-moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+	background-color: #666; /* 배경 색상 */
+	border-radius: 6px; /* 모서리 둥글게 */
+	border: none; /* 경계선 제거 */
+	color: #ffffff; /* 텍스트 색상 */
+	cursor: pointer; /* 마우스 포인터 */
+	padding: 0.5em 1em; /* 위아래, 좌우 패딩 */
+	height: auto; /* 자동 높이 */
+	line-height: normal; /* 정상 라인 높이 */
+	font-weight: 400; /* 글자 두께 */
+	margin-left: 0.5em; /* 입력 필드와 버튼 사이의 간격 */
+	margin-top: 1em;
+}
+
+/* 버튼 호버 및 액티브 상태 스타일 */
+#friendEmail + button:hover {
+	background-color: #737373; /* 호버 시 배경 색상 */
+}
+
+#friendEmail + button:active {
+	background-color: #595959; /* 클릭 시 배경 색상 */
+}
+
+#addFriendForm label {
+	color: #595959;
+}
+
+/* 특정 테이블에만 적용할 경우 */
+#friendTable td, #requestTable td {
+	color: black;
+	font-size: 0.8em;
+}
+
+/* 버튼 스타일 */
+#friend-requests button {
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	-moz-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	-webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	-ms-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+	background-color: #b7b7b7; /* 배경 색상 */
+	border-radius: 6px; /* 모서리 둥글게 */
+	border: none; /* 경계선 제거 */
+	color: #2e2e2e; /* 텍스트 색상 */
+	cursor: pointer; /* 마우스 포인터 */
+	padding: 0.5em 0.5em; /* 위아래, 좌우 패딩 */
+	height: auto; /* 자동 높이 */
+	line-height: normal; /* 정상 라인 높이 */
+	font-weight: 200; /* 글자 두께 */
+	margin-left: 0.1em; /* 입력 필드와 버튼 사이의 간격 */
+	margin-top: 0.1em;
+}
+
+#friend-requests button:hover {
+	background-color: #e6e6e6; /* 호버 시 배경 색상 */
+}
+

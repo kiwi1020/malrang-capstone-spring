@@ -72,11 +72,7 @@ public class WebOAuthSecurityConfig {
                 .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                         .userService(oAuth2UserCustomService)));
 
-        http.logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .deleteCookies("refresh_token"));
+        http.logout(AbstractHttpConfigurer::disable);
 
 
         http.exceptionHandling(exceptionHandling -> exceptionHandling
