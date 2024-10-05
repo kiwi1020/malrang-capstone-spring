@@ -48,7 +48,7 @@ public class UserService {
     }
 
     @Transactional
-    public void rateUser(String ratedUserEmail, String raterUserEmail, Double rating) {
+    public User rateUser(String ratedUserEmail, String raterUserEmail, Double rating) {
         User ratedUser = userRepository.findByEmail(ratedUserEmail)
                 .orElseThrow(() -> new RuntimeException("Rated user not found"));
         User raterUser = userRepository.findByEmail(raterUserEmail)
@@ -64,5 +64,7 @@ public class UserService {
 
         ratedUser.updateAverageRating();
         userRepository.save(ratedUser);
+
+        return ratedUser;
     }
 }

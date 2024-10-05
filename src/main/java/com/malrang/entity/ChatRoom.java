@@ -44,12 +44,13 @@ public class ChatRoom {
     }
 
     @Builder
-    public ChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount) {
+    public ChatRoom(String roomId, String roomName, String roomLanguage, String roomLevel, Long roomHeadCount, List<User> users) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.roomLanguage = roomLanguage;
         this.roomLevel = roomLevel;
         this.roomHeadCount = roomHeadCount;
+        this.users = users;
     }
 
     // 유틸리티 메서드 추가

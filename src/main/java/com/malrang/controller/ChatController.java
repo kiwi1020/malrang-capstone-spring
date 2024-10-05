@@ -19,12 +19,13 @@ public class ChatController {
     private final ChatService chatService;
 
     @PostMapping("/createRoom")
-    public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomData, Principal principal) {
+    public ResponseEntity createRoom(@RequestBody ChatDto.CreateRoom roomData ) {
         ChatDto.ChatRoom room = chatService.createRoom(roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel(), 0L);
         chatService.addChatRoom(room.getRoomId(), roomData.getRoomName(), roomData.getRoomLanguage(), roomData.getRoomLanguageLevel(), 0L);
 
         Map<String, Object> response = new HashMap<>();
         response.put("roomId", room.getRoomId());
+        response.put("roomName", room.getRoomName());
 
         return ResponseEntity.ok(response);
     }

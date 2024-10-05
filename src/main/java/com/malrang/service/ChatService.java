@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class ChatService {
-
-    private final ObjectMapper objectMapper;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private Map<String, ChatDto.ChatRoom> chatRooms;

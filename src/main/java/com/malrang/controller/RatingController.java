@@ -1,6 +1,7 @@
 package com.malrang.controller;
 
 import com.malrang.dto.RatingDto;
+import com.malrang.entity.User;
 import com.malrang.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ public class RatingController {
 
     @PostMapping("/rateUser")
     public ResponseEntity rateUser(@RequestBody RatingDto.RatingRequest request) throws Exception {
-        userService.rateUser(request.getRatedUserEmail(), request.getRaterUserEmail(), request.getRating());
-        return new ResponseEntity(HttpStatus.OK);
+        User ratedUser = userService.rateUser(request.getRatedUserEmail(), request.getRaterUserEmail(), request.getRating());
+        return ResponseEntity.ok(ratedUser);
     }
 }

@@ -83,6 +83,7 @@ public class GptDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
 //Front단에서 요청하는 DTO
     public static class QuestionRequest implements Serializable {
         private String question;

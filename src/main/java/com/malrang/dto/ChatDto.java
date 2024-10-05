@@ -1,9 +1,6 @@
 package com.malrang.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
@@ -32,6 +29,7 @@ public class ChatDto {
     }
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class CreateRoom {
         String roomName;
         String roomLanguage;
@@ -40,6 +38,7 @@ public class ChatDto {
 
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class addHeadCount {
         String roomId;
         String status;
