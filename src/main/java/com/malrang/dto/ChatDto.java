@@ -9,6 +9,8 @@ import java.util.Set;
 public class ChatDto {
 
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ChatRoom {
         private String roomId;
         private String roomName;
@@ -46,6 +48,8 @@ public class ChatDto {
 
     @Getter
     @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ChatMessage {
         // 메시지 타입 : 입장, 채팅, 나감
         public enum MessageType {

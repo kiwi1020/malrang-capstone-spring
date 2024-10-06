@@ -16,7 +16,7 @@ public class RatingController {
 
     @PostMapping("/rateUser")
     public ResponseEntity rateUser(@RequestBody RatingDto.RatingRequest request) throws Exception {
-        User ratedUser = userService.rateUser(request.getRatedUserEmail(), request.getRaterUserEmail(), request.getRating());
+        RatingDto.RatingResponse ratedUser = userService.rateUser(request.getRatedUserEmail(), request.getRaterUserEmail(), request.getRating());
         return ResponseEntity.ok(ratedUser);
     }
 }

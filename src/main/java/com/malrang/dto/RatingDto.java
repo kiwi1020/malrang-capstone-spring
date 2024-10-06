@@ -14,4 +14,13 @@ public class RatingDto {
         private String raterUserEmail;
         private Double rating;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @RequiredArgsConstructor
+    public static class RatingResponse {
+        private String ratedUserEmail;
+        private String raterUserEmail;
+        private Double rating;
+    }
 }

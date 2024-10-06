@@ -1,5 +1,6 @@
 package com.malrang.service;
 
+import com.malrang.dto.RatingDto;
 import com.malrang.dto.UserDto;
 import com.malrang.entity.User;
 import com.malrang.entity.UserRating;
@@ -30,7 +31,8 @@ public class UserService {
             existingUser.setLanguage(dto.getLanguage());
 
             // 업데이트된 사용자를 저장합니다.
-            return userRepository.save(existingUser);
+            userRepository.save(existingUser);
+            return existingUser;
         } else {
             // 기존 사용자가 존재하지 않는 경우에는 적절한 예외를 발생시킵니다.
             throw new Exception("User not found");
@@ -48,7 +50,7 @@ public class UserService {
     }
 
     @Transactional
-    public User rateUser(String ratedUserEmail, String raterUserEmail, Double rating) {
+    public RatingDto.RatingResponse rateUser(String ratedUserEmail, String raterUserEmail, Double rating) {
         User ratedUser = userRepository.findByEmail(ratedUserEmail)
                 .orElseThrow(() -> new RuntimeException("Rated user not found"));
         User raterUser = userRepository.findByEmail(raterUserEmail)
@@ -65,6 +67,7 @@ public class UserService {
         ratedUser.updateAverageRating();
         userRepository.save(ratedUser);
 
-        return ratedUser;
+        RatingDto.RatingResponse ratingResponse = new RatingDto.RatingResponse(ratedUserEmail, raterUserEmail, rating);
+        return ratingResponse;
     }
 }

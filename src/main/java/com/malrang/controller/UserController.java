@@ -43,14 +43,8 @@ public class UserController {
 
     @PostMapping("/info/update")
     public ResponseEntity updateUserInfo(@RequestBody UserDto.UpdateUserRequest dto) throws Exception {
-        userService.update(dto);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @PostMapping("/rate")
-    public ResponseEntity rateUser(@RequestBody RatingDto.RatingRequest request) throws Exception {
-        userService.rateUser(request.getRatedUserEmail(), request.getRaterUserEmail(), request.getRating());
-        return new ResponseEntity(HttpStatus.OK);
+        User user = userService.update(dto);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/logout")

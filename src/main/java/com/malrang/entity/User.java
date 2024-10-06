@@ -1,5 +1,6 @@
 package com.malrang.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,6 +39,7 @@ public class User implements UserDetails {
     private Double averageRating;
 
     @OneToMany(mappedBy = "ratedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<UserRating> ratings = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

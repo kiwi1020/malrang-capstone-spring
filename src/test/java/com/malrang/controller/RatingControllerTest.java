@@ -93,6 +93,6 @@ class RatingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.averageRating").value(4.5));
+                .andExpect(jsonPath("$.rating").value(4.5));
     }
 }
