@@ -14,4 +14,19 @@ public class UserDto {
         private String nickname;
         private String language;
     }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class getAllUserRequest {
+        private String language;
+    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class getAllUserResponse {
+        private String email;
+        private String language;
+        private double averageRating;
+    }
+
 }

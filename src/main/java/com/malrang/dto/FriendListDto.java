@@ -12,4 +12,12 @@ public class FriendListDto {
     public static class FriendRequestDto {
         private String friendEmail;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class InviteRequestDto {
+        private String friendEmail;
+        private String roomId;
+    }
 }

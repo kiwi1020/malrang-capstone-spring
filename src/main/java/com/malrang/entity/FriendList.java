@@ -28,15 +28,19 @@ public class FriendList {
     @Getter
     private Set<String> receivedRequests; // 내가 받은 친구 요청 목록
 
+    @Indexed
+    @Getter
+    private Map<String, String> receivedInvites; // 내가 받은 친구 요청 목록
 
     public FriendList() {
 
     }
-    public FriendList(String email, Map<String, Boolean> friendStatuses, Set<String> sentRequests, Set<String> receivedRequests) {
+    public FriendList(String email, Map<String, Boolean> friendStatuses, Set<String> sentRequests, Set<String> receivedRequests, Map<String, String> receivedInvites) {
         this.email = email;
         this.friendStatuses = friendStatuses;
         this.sentRequests = sentRequests;
         this.receivedRequests = receivedRequests;
+        this.receivedInvites = receivedInvites;
     }
 
     // Setters
@@ -53,5 +57,7 @@ public class FriendList {
     }
 
     public void setReceivedRequests(Set<String> receivedRequests) { this.receivedRequests = receivedRequests; }
+
+    public void setReceivedInvites(Map<String, String> receivedInvites) { this.receivedInvites = receivedInvites; }
 
 }

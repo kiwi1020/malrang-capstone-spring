@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -61,5 +62,18 @@ public class UserController {
         httpServletResponse.addCookie(refreshTokenCookie);
 
         return ResponseEntity.ok().build();
+    }
+    @PostMapping("/searchUsers")
+    public ResponseEntity<List<UserDto.getAllUserResponse>> searchUsers(@RequestBody UserDto.getAllUserRequest dto, Principal principal) {
+        String language;
+        // dto.getLanguage()가 null일 경우를 체크
+        if (dto.getLanguage() == null || dto.getLanguage().isEmpty()) {
+            language = "All"; // 기본값 설정
+        } else {
+            language = dto.getLanguage();
+        }
+
+        List<UserDto.getAllUserResponse> users = userService.searchUsers(language, principal.getName());
+        return ResponseEntity.ok(users);
     }
 }

@@ -24,6 +24,28 @@ async function createRoom() {
     await httpRequest('POST', '/chat/createRoom', body, success, fail);
 }
 
+async function goToRoom(roomId) {
+    // 이동할 URL을 설정합니다.
+    const url = `/chat/chatRoom?roomId=${encodeURIComponent(roomId)}`;
+
+    function success(participants) {
+        if (participants.length >= 2) {
+            alert('채팅방의 인원 수가 가득차 입장에 실패했습니다.');
+            window.location.href = '/chat/chatList'
+        }
+        else
+            window.location.href = url // 해당 방으로 이동
+    };
+
+    function fail() {
+        alert('존재하지 않은 채팅방입니다.');
+        window.location.href = '/chat/chatList'
+    };
+
+    // HTTP 요청 보내기
+    await httpRequest('GET', '/chat/getParticipants?roomId=' + encodeURIComponent(roomId), null, success, fail);
+}
+
 async function translateMessage(message, roomId, userLanguage) {
     try {
         let body;

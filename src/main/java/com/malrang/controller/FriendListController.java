@@ -50,4 +50,18 @@ public class FriendListController {
         String userEmail = principal.getName();
         return ResponseEntity.ok(friendListService.getFriendList(userEmail));
     }
+
+    // 채팅방에 친구 초대하기
+    @PostMapping("/request/invite")
+    public ResponseEntity<FriendList> inviteFriendRequest(Principal principal, @RequestBody FriendListDto.InviteRequestDto dto) {
+        String userEmail = principal.getName();
+        return ResponseEntity.ok(friendListService.inviteFriendRequest(userEmail, dto.getFriendEmail(), dto.getRoomId()));
+    }
+
+    @PostMapping("/response/invite")
+    public ResponseEntity<FriendList> inviteFriendResponse(Principal principal, @RequestBody FriendListDto.InviteRequestDto dto) {
+        String userEmail = principal.getName();
+        return ResponseEntity.ok(friendListService.inviteFriendResponse(userEmail, dto.getFriendEmail(), dto.getRoomId()));
+    }
+
 }

@@ -22,15 +22,15 @@ public class FriendListService {
 
     // 친구 목록 생성
     public FriendList createFriendList(String email) {
-        FriendList friendList = new FriendList(email, new HashMap<>(), new HashSet<>(), new HashSet<>());
+        FriendList friendList = new FriendList(email, new HashMap<>(), new HashSet<>(), new HashSet<>(), new HashMap<>());
         redisTemplate.opsForHash().put("friendList", email, friendList);
         return friendList;
     }
 
     // 친구 요청 보내기
     public FriendList sendFriendRequest(String email, String friendEmail) {
-         userRepository.findByEmail(friendEmail)
-                 .orElseThrow(() -> new IllegalArgumentException("Friend with email " + friendEmail + " not found"));
+        userRepository.findByEmail(friendEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Friend with email " + friendEmail + " not found"));
         // 요청 보낼 사용자 FriendList 가져오기
         FriendList senderFriendList = (FriendList) redisTemplate.opsForHash().get("friendList", email);
         if (senderFriendList != null) {
@@ -81,6 +81,7 @@ public class FriendListService {
         }
         return senderFriendList;
     }
+
     // 친구 목록 조회
     public FriendList getFriendList(String email) {
         return (FriendList) redisTemplate.opsForHash().get("friendList", email);
@@ -103,5 +104,47 @@ public class FriendListService {
                 redisTemplate.opsForHash().put("friendList", friendList.getEmail(), friendList);
             }
         }
+    }
+
+    // 대상에게 채팅방 초대하기
+    public FriendList inviteFriendRequest(String email, String friendEmail, String roomId) {
+        // 요청 받은 사용자 FriendList 가져오기
+        FriendList receiverFriendList = (FriendList) redisTemplate.opsForHash().get("friendList", friendEmail);
+
+        // 초대 요청을 보낸 사용자와 방 아이디를 추가
+        if (receiverFriendList != null) {
+            // 초대 요청 목록에 추가
+            Map<String, String> inviteRequests = receiverFriendList.getReceivedInvites();
+            if (inviteRequests == null) {
+                inviteRequests = new HashMap<>();
+            }
+            inviteRequests.put(email, roomId); // 초대 요청 추가
+            receiverFriendList.setReceivedInvites(inviteRequests); // 업데이트된 초대 요청 목록 설정
+
+            // Redis에 업데이트된 FriendList 저장
+            redisTemplate.opsForHash().put("friendList", friendEmail, receiverFriendList);
+        }
+
+        return receiverFriendList; // 업데이트된 FriendList 반환
+    }
+
+
+    public FriendList inviteFriendResponse(String email, String friendEmail, String roomId) {
+        // 요청 받은 사용자 FriendList 가져오기
+        FriendList senderFriendList  = (FriendList) redisTemplate.opsForHash().get("friendList", email);
+
+        // 초대 요청을 보낸 사용자와 방 아이디를 추가
+        if (senderFriendList  != null) {
+            // 초대 요청 목록에 추가
+            Map<String, String> receivedInvites  = senderFriendList.getReceivedInvites();
+            if (receivedInvites != null) {
+                receivedInvites.remove(friendEmail); // 해당 친구 이메일의 요청 삭제
+                senderFriendList.setReceivedInvites(receivedInvites); // 업데이트된 초대 요청 목록 설정
+            }
+
+            // Redis에 업데이트된 FriendList 저장
+            redisTemplate.opsForHash().put("friendList", email, senderFriendList);
+        }
+        return senderFriendList; // 업데이트된 FriendList 반환
     }
 }

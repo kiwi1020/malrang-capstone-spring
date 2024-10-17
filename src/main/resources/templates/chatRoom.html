@@ -6,12 +6,34 @@
     <link rel="stylesheet" href="/css/main.css?dt=20240918"/>
 </head>
 <body>
+
+
 <div id="user_email" style="display: none"></div>
 <div id="user_language" style="display: none"></div>
 <div class="container">
     <div id="user_name" style="display: none;">User Name</div>
     <div>
         <h2>Chat Room</h2>
+        <a href="#" onclick="loadInviteList(urlParams.get('roomId'))" style="position: absolute; top: 10px; right: 10px; text-decoration: none; font-weight: bold;">Invite Friend</a>
+            <!-- 친구 목록 섹션 -->
+            <section id="friend-management" class="section-content" style="display: none;">
+                <header class="major">
+                    <h2>Your Friend List</h2>
+                </header>
+                <table id="friendTable">
+                    <thead>
+                    <tr>
+                        <th>Friend Email</th>
+                        <th>Status</th>
+                        <th>Invite</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 친구 목록이 여기에 동적으로 추가될 예정 -->
+                    </tbody>
+                </table>
+            </section>
+
         <div class="msgArea"></div>
     </div>
     <div class="inputArea">
@@ -40,6 +62,7 @@
 <script src="/js/userInfo.js?testNm=1"></script>
 <script src="/js/rating.js?testNm=1"></script>
 <script src="/js/chatRoom.js?testNm=1"></script>
+<script src="/js/invite.js?testNm=1" defer></script>
 
 <script>
     // WebSocket 연결을 위한 변수
