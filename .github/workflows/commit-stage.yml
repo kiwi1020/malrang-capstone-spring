@@ -12,18 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set Up MySQL
-        uses: samin/mysql-action@v1
-        with:
-
-#          host port: 3306
-#          container port: 3306
-#          character set server: 'utf8'
-          mysql version: '8.0'
-          mysql database: 'test_db'
-          mysql password: '1248'
-          mysql user: 'root'
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -51,6 +39,14 @@ jobs:
           CHAT_GPT_API_KEY: ${{ secrets.CHAT_GPT_API_KEY }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          JWT_ISSUER: ${{ secrets.JWT_ISSUER }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: |
           chmod +x gradlew
           ./gradlew build
