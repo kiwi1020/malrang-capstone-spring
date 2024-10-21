@@ -1,6 +1,7 @@
 package com.malrang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.malrang.configuration.support.TestContainerSupport;
 import com.malrang.dto.FriendListDto;
 import com.malrang.entity.ChatRoom;
 import com.malrang.entity.FriendList;
@@ -15,6 +16,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,7 +28,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -43,7 +47,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FriendListControllerTest {
+@Testcontainers
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("integration")
+public class FriendListControllerTest extends TestContainerSupport {
 
     @Autowired
     private MockMvc mockMvc;
