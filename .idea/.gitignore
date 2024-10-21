@@ -7,8 +7,5 @@
 /dataSources/
 /dataSources.local.xml
 
-### properties ###
-**/application-oauth.properties
-
 ### bulid ###
 /build/
