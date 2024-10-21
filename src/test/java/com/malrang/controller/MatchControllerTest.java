@@ -1,6 +1,7 @@
 package com.malrang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.malrang.configuration.support.TestContainerSupport;
 import com.malrang.dto.MatchDto;
 import com.malrang.service.MatchService;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,10 +11,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 
 import static org.mockito.Mockito.*;
@@ -22,7 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MatchControllerTest {
+@Testcontainers
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("integration")
+public class MatchControllerTest extends TestContainerSupport {
 
     @Autowired
     private MockMvc mockMvc;

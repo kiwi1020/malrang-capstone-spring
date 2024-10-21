@@ -1,6 +1,7 @@
 package com.malrang.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.malrang.configuration.support.TestContainerSupport;
 import com.malrang.dto.ChatDto;
 import com.malrang.service.ChatService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,8 +24,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
-class WebSockChatHandlerTest {
+@Testcontainers
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("integration")
+class WebSockChatHandlerTest extends TestContainerSupport {
 
     @Mock
     private ObjectMapper objectMapper;
