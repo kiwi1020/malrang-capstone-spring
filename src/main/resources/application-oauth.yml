@@ -1,0 +1,11 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${malrang-service.security.oauth2.client.registration.google.client-id}
+            client-secret: ${malrang-service.security.oauth2.client.registration.google.client-secret}
+            scope:
+              - profile
+              - email
