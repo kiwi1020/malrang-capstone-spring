@@ -49,4 +49,4 @@ jobs:
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew build -Dspring.profiles.active=test
+          ./gradlew test -Dspring.profiles.active=test
