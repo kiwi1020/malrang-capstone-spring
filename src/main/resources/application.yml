@@ -21,7 +21,7 @@ spring:
     name: malrang-service
     cloud:
       config:
-        uri: http://localhost:8888
+        uri: http://43.201.54.246:8888
         request-connect-timeout: 5000 # 5s
         request-read-timeout: 5000 # 5s
         fail-fast: false # In production, set to true
@@ -32,14 +32,14 @@ spring:
           multiplier: 1.1
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${malrang-service.datasource.url:${DB_URL}}
-    username: ${malrang-service.datasource.username:${DB_USERNAME}}
-    password: ${malrang-service.datasource.password:${DB_PASSWORD}}
+    url: ${malrang-service.datasource.url}
+    username: ${malrang-service.datasource.username}
+    password: ${malrang-service.datasource.password}
   data:
     redis:
-      port: ${malrang-service.data.redis.port:${REDIS_PORT}}
-      host: ${malrang-service.data.redis.host:${REDIS_HOST}}
-      password: ${malrang-service.data.redis.password:${REDIS_PASSWORD}}
+      port: ${malrang-service.data.redis.port}
+      host: ${malrang-service.data.redis.host}
+      password: ${malrang-service.data.redis.password}
   jpa:
     show-sql: false
     hibernate:
@@ -58,11 +58,11 @@ management:
         include: refresh
 
 jwt:
-  issuer: ${malrang-service.jwt.issuer:${JWT_ISSUER}}
-  secret_key: ${malrang-service.jwt.secret_key:${JWT_SECRET_KEY}}
+  issuer: ${malrang-service.jwt.issuer}
+  secret_key: ${malrang-service.jwt.secret_key}
 
 api-key:
-  chat_gpt: ${malrang-service.api-key.chat_gpt:${CHAT_GPT_API_KEY}}
+  chat_gpt: ${malrang-service.api-key.chat_gpt}
 
 encrypt:
   key: V2k@7g#eQ3rL!mT9
