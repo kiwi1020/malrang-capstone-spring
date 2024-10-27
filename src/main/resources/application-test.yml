@@ -1,5 +1,8 @@
 # MySQL JDBC Driver Class
 spring:
+  cloud:
+    config:
+      enabled: false  # Config Server ????
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
