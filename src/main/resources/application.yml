@@ -9,27 +9,27 @@ server:
   servlet:
     encoding:
       force-response: true
-    error:
-      whitelabel:
-        enabled: false
-      path: /error
+  error:
+    whitelabel:
+      enabled: false
+    path: /error
 
 spring:
   config:
-    import: "optional:configserver:"
+    import: "configserver:"
   application:
     name: malrang-service
-    cloud:
-      config:
-        uri: http://43.201.54.246:8888
-        request-connect-timeout: 5000 # 5s
-        request-read-timeout: 5000 # 5s
-        fail-fast: false # In production, set to true
-        retry:
-          max-attempts: 6
-          initial-interval: 1000 # 1s
-          max-interval: 2000 # 2s
-          multiplier: 1.1
+  cloud:
+    config:
+      uri: http://43.201.54.246:8888
+      request-connect-timeout: 5000 # 5s
+      request-read-timeout: 5000 # 5s
+      fail-fast: true # In production, set to true
+      retry:
+        max-attempts: 6
+        initial-interval: 1000 # 1s
+        max-interval: 2000 # 2s
+        multiplier: 1.1
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${malrang-service.datasource.url}
@@ -44,8 +44,12 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: create
-      format_sql: true
-      dialect: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+        dialect.storage_engine: innodb
+
     open-in-view: false
 
   profiles:
