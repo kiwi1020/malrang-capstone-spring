@@ -1,0 +1,45 @@
+version: "3.8"
+services:
+
+  # Applications
+
+  malrang-service:
+    depends_on:
+      - malrang-mysql
+    image: "kiwi1020/malrang-app"
+    container_name: "malrang-service"
+    ports:
+      - 8080:8080
+      - 9080:9080
+    environment:
+      # Buildpacks environment variable to configure the number of threads in memory calculation
+      - BPL_JVM_THREAD_COUNT=50
+      # Buildpacks environment variable to enable debug through a socket on port 8001
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=9080
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_DATASOURCE_URL=jdbc:mysql://malrang-mysql:3306/test_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+
+  config-server:
+    image: "kiwi1020/config-server"
+    container_name: "config-server"
+    ports:
+      - 8888:8888
+      - 9888:9888
+    environment:
+      # Buildpacks environment variable to configure the number of threads in memory calculation
+      - BPL_JVM_THREAD_COUNT=50
+      # Buildpacks environment variable to enable debug through a socket on port 9888
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=9888
+
+  # Backing Services
+
+  malrang-mysql:
+    image: "mysql:8.0"
+    container_name: "malrang-mysql"
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=dnduf4594   # 추가된 부분
+      - MYSQL_DATABASE=test_db
