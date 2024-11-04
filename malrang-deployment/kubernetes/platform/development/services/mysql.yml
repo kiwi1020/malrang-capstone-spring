@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: malrang-mysql
+  labels:
+    db: malrang-mysql
+spec:
+  selector:
+    matchLabels:
+      db: malrang-mysql
+  template:
+    metadata:
+      labels:
+        db: malrang-mysql
+    spec:
+      containers:
+        - name: malrang-mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "dnduf4594"
+            - name: MYSQL_DATABASE
+              value: "malrang_db"
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: 400m
+              memory: 512Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: malrang-mysql
+  labels:
+    db: malrang-mysql
+spec:
+  type: ClusterIP
+  selector:
+    db: malrang-mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306

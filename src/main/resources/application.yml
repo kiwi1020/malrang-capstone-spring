@@ -1,5 +1,6 @@
 server:
-  port: 8080
+  port: 9001
+  shutdown: graceful
   tomcat:
     connection-timeout: 2s
     keep-alive-timeout: 15s
@@ -19,6 +20,8 @@ spring:
     import: "configserver:"
   application:
     name: malrang-service
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
   cloud:
     config:
       uri: http://43.201.54.246:8888

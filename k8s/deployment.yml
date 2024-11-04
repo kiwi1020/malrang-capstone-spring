@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: malrang-service
+  labels:
+    app: malrang-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: malrang-service
+  template:
+    metadata:
+      labels:
+        app: malrang-service
+    spec:
+      containers:
+        - name: malrang-service
+          image: kiwi1020/malrang-app
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 9001
+          env:
+            - name: BPL_JVM_THREAD_COUNT
+              value: "50"
+            - name: SPRING_CLOUD_CONFIG_URI
+              value: http://43.201.54.246:8888
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://malrang-mysql:3306/malrang_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+            - name: SPRING_DATA_REDIS_HOST
+              value: malrang-redis
+            - name: SPRING_DATA_REDIS_PORT
+              value: "6379"
