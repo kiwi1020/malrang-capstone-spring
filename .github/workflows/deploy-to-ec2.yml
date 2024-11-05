@@ -29,8 +29,8 @@ jobs:
           cat ./k8s/service.yml
 
       - name: Kubectl apply
-          uses: steebchen/kubectl@v2.0.0
-          with:
-            config: ${{ secrets.KUBECONFIG }}
-            command: apply -f ./k8s/deployment.yaml -f ./k8s/service.yaml
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBECONFIG }}
+          command: apply -f ./k8s/deployment.yaml -f ./k8s/service.yaml
 
