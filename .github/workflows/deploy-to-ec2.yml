@@ -1,0 +1,36 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - master  # master 브랜치로 푸시될 때 배포 실행
+
+env:
+  OWNER: kiwi1020
+  REGISTRY: ghcr.io
+  APP_REPO: malrang-service
+  VERSION: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # GitHub 저장소에서 코드를 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # YAML 파일의 버전 업데이트
+      - name: Update Deployment YAML
+        run: |
+          sed -i "s/latest/${GITHUB_SHA}/g" ./k8s/deployment.yaml
+          sed -i "s/latest/${GITHUB_SHA}/g" ./k8s/service.yml
+          cat ./k8s/deployment.yaml
+          cat ./k8s/service.yml
+
+      - name: Kubectl apply
+          uses: steebchen/kubectl@v2.0.0
+          with:
+            config: ${{ secrets.KUBECONFIG }}
+            command: apply -f ./k8s/deployment.yaml -f ./k8s/service.yaml
+
