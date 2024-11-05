@@ -35,8 +35,7 @@ spring:
         multiplier: 1.1
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: ${malrang-service.datasource.url}
-    url: jdbc:mysql://localhost:3306/test_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: ${malrang-service.datasource.url}
     username: ${malrang-service.datasource.username}
     password: ${malrang-service.datasource.password}
 
