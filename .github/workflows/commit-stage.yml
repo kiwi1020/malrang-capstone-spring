@@ -49,7 +49,7 @@ jobs:
 
       - name: Validate Kubernetes manifests
         run: |
-          kubeconform --strict k8s
+          kustomize build k8s | kubeconform --strict -
 
       - name: Build, unit tests and integration tests
         run: |
