@@ -1,13 +1,12 @@
 name: Deploy Stage
 
-#on:
-#  workflow_run:
-#    workflows: [ 'Acceptance Stage' ]
-#    types: [ completed ]
-#    branches: master
-#  concurrency: acceptance
+on:
+  workflow_run:
+    workflows: ['Acceptance Stage']
+    types: [ completed ]
+    branches: master
+  concurrency: acceptance
 
-on: push
 
 env:
   OWNER: kiwi1020
