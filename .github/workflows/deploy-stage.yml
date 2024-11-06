@@ -32,6 +32,6 @@ jobs:
             docker pull ghcr.io/kiwi1020/malrang-service:latest
             docker stop malrang-app || true
             docker rm malrang-app || true
-            docker run -d --name malrang-app -p 8080:8080 ghcr.io/kiwi1020/malrang-service:latest
+            docker run -d --name malrang-app -p 8080:8080 -m 512m ghcr.io/kiwi1020/malrang-service:latest
       
 
