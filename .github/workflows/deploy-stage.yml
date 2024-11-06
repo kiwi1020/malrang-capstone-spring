@@ -1,11 +1,10 @@
 name: Deploy Stage
-
 on:
   workflow_run:
     workflows: ['Acceptance Stage']
     types: [ completed ]
     branches: master
-  concurrency: acceptance
+concurrency: acceptance
 
 
 env:
