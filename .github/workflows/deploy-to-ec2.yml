@@ -1,9 +1,11 @@
-name: Deploy to AWS EC2
+name: Deploy
 
 on:
-  push:
-    branches:
-      - master  # master 브랜치로 푸시될 때 배포 실행
+  workflow_run:
+    workflows: [ 'Acceptance Stage' ]
+    types: [ completed ]
+    branches: master
+  concurrency: acceptance
 
 env:
   OWNER: kiwi1020
@@ -15,7 +17,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.3.0
+      - uses: actions/checkout@v4
 
       - name: execute remote ssh
         uses: appleboy/ssh-action@master
@@ -23,7 +25,11 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-
-
+          script: |
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u kiwi1020 --password-stdin
+            docker pull ghcr.io/kiwi1020/malrang-service:${{ github.sha }}
+            docker stop malrang-app || true
+            docker rm malrang-app || true
+            docker run -d --name malrang-app -p 8080:8080 ghcr.io/kiwi1020/malrang-service:${{ github.sha }}
       
 
