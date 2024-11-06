@@ -14,23 +14,16 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # GitHub 저장소에서 코드를 체크아웃
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3.3.0
 
-      # YML 파일의 버전 업데이트
-      - name: Update Deployment YML
-        run: |
-          sed -i "s/latest/${GITHUB_SHA}/g" ./k8s/deployment.yml
-          sed -i "s/latest/${GITHUB_SHA}/g" ./k8s/service.yml
-          cat ./k8s/deployment.yml
-          cat ./k8s/service.yml
-
-      - name: Kubectl apply
-        uses: steebchen/kubectl@v2.0.0
+      - name: execute remote ssh
+        uses: appleboy/ssh-action@master
         with:
-          config: ${{ secrets.KUBECONFIG }}
-          command: apply -f ./k8s/deployment.yml -f ./k8s/service.yml
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+
+      
 
