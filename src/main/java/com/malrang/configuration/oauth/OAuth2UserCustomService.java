@@ -52,6 +52,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                     .nickname(name)
                     .language("korean")
                     .averageRating(0.0)
+                    .interest("All")
                     .build();
 
             // 친구 목록을 Redis에 생성

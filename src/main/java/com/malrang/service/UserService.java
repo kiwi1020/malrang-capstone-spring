@@ -36,6 +36,7 @@ public class UserService {
             // 기존 사용자의 필드를 업데이트합니다.
             existingUser.setNickname(dto.getNickname());
             existingUser.setLanguage(dto.getLanguage());
+            existingUser.setInterest(dto.getInterest());
 
             // 업데이트된 사용자를 저장합니다.
             userRepository.save(existingUser);
@@ -74,7 +75,8 @@ public class UserService {
                     .map(user -> new UserDto.getAllUserResponse(
                             user.getEmail(),
                             user.getLanguage(),
-                            user.getAverageRating() // averageRating은 User 엔티티에 있어야 함
+                            user.getAverageRating(), // averageRating은 User 엔티티에 있어야 함
+                            user.getInterest()
                     ))
                     .collect(Collectors.toList());
 
@@ -87,7 +89,8 @@ public class UserService {
                     .map(user -> new UserDto.getAllUserResponse(
                             user.getEmail(),
                             user.getLanguage(),
-                            user.getAverageRating() // averageRating은 User 엔티티에 있어야 함
+                            user.getAverageRating(), // averageRating은 User 엔티티에 있어야 함
+                            user.getInterest()
                     ))
                     .collect(Collectors.toList());
     }

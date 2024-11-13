@@ -104,11 +104,14 @@ function updateUserInfo() {
     let email = document.getElementById('user_email').innerText;
     let nickname = document.getElementById('user_name').value;
     let language = document.getElementById('language').value;
+    let interest =  document.getElementById('interest').value;
+
     // 요청 본문 데이터 설정
     let body = JSON.stringify({
         email: email,
         nickname: nickname,
-        language: language
+        language: language,
+        interest: interest
     });
 
     // 성공 및 실패 시 실행할 콜백 함수 정의

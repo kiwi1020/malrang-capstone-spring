@@ -214,7 +214,7 @@ function filterUsers() {
             const userDiv = document.createElement("div");
             userDiv.classList.add("user-item");
             userDiv.innerHTML = `
-               <span class="user-info">${user.email} (${user.language}, Courtesy Score: ${user.averageRating})</span>
+               <span class="user-info">${user.email} (${user.language}, Interest: ${user.interest}, Courtesy Score: ${user.averageRating})</span>
                 <button class="add-friend-btn" onclick="addFriend('${user.email}')">Add</button>
             `;
             userList.appendChild(userDiv);

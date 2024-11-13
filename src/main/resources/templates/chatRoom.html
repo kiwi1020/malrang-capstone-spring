@@ -14,7 +14,8 @@
     <div id="user_name" style="display: none;">User Name</div>
     <div>
         <h2>Chat Room</h2>
-        <a href="#" onclick="loadInviteList(urlParams.get('roomId'))" style="position: absolute; top: 10px; right: 10px; text-decoration: none; font-weight: bold;">Invite Friend</a>
+        <a href="javascript:void(0)" onclick="loadInviteList(urlParams.get('roomId'))" style="position: absolute; top: 10px; right: 10px; text-decoration: none; font-weight: bold;">Invite Friend</a>
+        <a href="javascript:void(0)" onclick="recommendTopic(urlParams.get('roomInterest'), urlParams.get('roomLanguage'))" style="position: absolute; top: 10px; right: 130px; text-decoration: none; font-weight: bold;">Recommend a topic</a>
             <!-- 친구 목록 섹션 -->
             <section id="friend-management" class="section-content" style="display: none;">
                 <header class="major">
@@ -104,7 +105,7 @@
             newMsg.innerText = data.sender + ': ' + data.msg;
             if (data.sender === document.getElementById('user_name').innerText) {
                 newMsg.classList.add('ownMessage');
-            } else if (data.sender === "GPT") {
+            } else if (data.sender === "AI moderator bot") {
                 newMsg.classList.add('gptMessage');
             } else {
                 newMsg.classList.add('otherMessage');
@@ -123,12 +124,51 @@
         await setRoomHeadCount(urlParams.get('roomId'), 'join');
     }
 
+    //주제 추천 함수
+    async function recommendTopic(interest, language) {
+        let body = null
+        try {
+            if (interest=== 'All'){
+                body = JSON.stringify({
+                    question: "Please recommend a discussion topic in " + language + " in one or two sentences. Please make sure to recommend it in " + language + " language."
+                });
+            } else {
+                body = JSON.stringify({
+                    question: "Please recommend a discussion topic based on the " + interest + " field in " + language + " in one or two sentences. Please make sure to recommend it in " + language + " language."
+                });
+            }
+
+            const response = await fetch('/chat-gpt/question', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+                    'Content-Type': 'application/json',
+                },
+                body: body,
+            });
+
+            const json = await response.json();
+            talkMsg = {
+                "type": "TALK",
+                "roomId": urlParams.get('roomId'),
+                "sender": "AI moderator bot",
+                "msg": json.answer
+            };
+            socket.send(JSON.stringify(talkMsg));
+        } catch (error) {
+            console.error('Error:', error);
+            alert('주제 추천에 실패했습니다.');
+        }
+    }
+
     // 메시지 전송 함수
     async function sendMsg() {
         let userName = document.getElementById('user_name').innerText;
         let content = document.querySelector('.content').value;
         let user_language = document.getElementById('user_language').innerText;
         let isOffensive = await detectAggressiveMessage(content, urlParams.get('roomId'), user_language);
+        let translatedContent = await translateMessage(content, urlParams.get('roomId'), user_language);
+        let isIrrelevant = await detectIrrelevantMessage(translatedContent, urlParams.get('roomId'), user_language, urlParams.get('roomInterest'));
         let talkMsg = null;
 
         if (isOffensive === true) {
@@ -137,25 +177,25 @@
             talkMsg = {
                 "type": "TALK",
                 "roomId": urlParams.get('roomId'),
-                "sender": "GPT",
-                "msg": "An offensive message has been detected."
+                "sender": "AI moderator bot",
+                "msg": "Inappropriate statement has been detected."
             };
             socket.send(JSON.stringify(talkMsg));
             return;
         } else {
-            talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": content};
+            talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": translatedContent};
             socket.send(JSON.stringify(talkMsg));
         }
 
-        let messageArea = document.querySelector('.msgArea');
-        let translationButton = document.createElement('button');
-        translationButton.innerText = 'Grammar Check';
-        translationButton.classList.add('translationButton');
-        translationButton.onclick = function () {
-            translateMessage(content, urlParams.get('roomId'), user_language);
+        if (isIrrelevant === true) {
+            talkMsg = {
+                "type": "TALK",
+                "roomId": urlParams.get('roomId'),
+                "sender": "AI moderator bot",
+                "msg": "This statement does not fit the " + urlParams.get('roomInterest') + " category or disrupts the flow of the debate. Please reconsider."
+            };
+            socket.send(JSON.stringify(talkMsg));
         }
-        messageArea.insertAdjacentElement('beforeend', translationButton); // 'beforeend' 위치에 버튼을 추가합니다.
-        document.getElementById('messageInput').value='';
     }
 
     // 채팅방 나가기 함수

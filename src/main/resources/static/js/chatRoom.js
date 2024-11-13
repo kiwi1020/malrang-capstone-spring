@@ -14,7 +14,9 @@ async function createRoom() {
     function success(response) {
         console.log('채팅방 생성에 성공했습니다.');
         let roomId = response.roomId; // 서버에서 받은 roomId
-        window.location.href = "/chat/chatRoom?roomId=" + roomId; // 해당 방으로 이동
+        let roomLanguageLevel = response.roomLanguageLevel
+        let roomLanguage = response.roomLanguage
+        window.location.href = "/chat/chatRoom?roomId=" + roomId+ "&roomInterest=" + roomLanguageLevel + "&roomLanguage=" + roomLanguage; // 해당 방으로 이동
     };
 
     function fail() {
@@ -24,9 +26,9 @@ async function createRoom() {
     await httpRequest('POST', '/chat/createRoom', body, success, fail);
 }
 
-async function goToRoom(roomId) {
+async function goToRoom(roomId, roomInterest, roomLanguage) {
     // 이동할 URL을 설정합니다.
-    const url = `/chat/chatRoom?roomId=${encodeURIComponent(roomId)}`;
+    const url = `/chat/chatRoom?roomId=${encodeURIComponent(roomId)}&roomInterest=${encodeURIComponent(roomInterest)}&roomLanguage=${encodeURIComponent(roomLanguage)}`;
 
     function success(participants) {
         if (participants.length >= 2) {
@@ -52,32 +54,32 @@ async function translateMessage(message, roomId, userLanguage) {
         switch (userLanguage) {
             case "korean":
                 body = JSON.stringify({
-                    question: message + ".란 문장이 문법적으로 옳은지 내가 물어본 문장을 넣어서 한국어로 설명해주고 만약 올바르지 않다면 꼭 올바르지 않은 이유를 설명해서 올바른 문장으로 교정해줘."
+                    question: message + ".란 문장이 문법적으로 틀리면 아무런 부가적인 설명이나 대답없이 올바른 문장만을 출력해줘. 앞이랑 뒤에 특수 기호 붙이지마. 애매하거나 옳으면 내가 보낸 그대로의 문장을 출력해"
                 });
                 break;
             case "japanese":
                 body = JSON.stringify({
-                    question: message + ".文が文法的に正しいかどうかを確認し、私が尋ねた文を入れて日本語で説明してください。もし文法が正しくない場合は、その理由を詳しく説明してください。"
+                    question: message + ".前の文が文法的に間違っている場合は、追加の説明や返答なしで正しい文だけを出力してください。前後に特別な記号は付けないでください。曖昧であるか正しい場合は、私が送った通りの文をそのまま出力してください。"
                 });
                 break;
             case "chinese":
                 body = JSON.stringify({
-                    question: message + ".请检查句子是否符合语法规则，并用中文解释我提问的句子。如果语法不正确，请详细说明原因."
+                    question: message + ".如果前一句话语法不正确，请仅提供正确的句子，不要添加任何额外的解释或回应。前后不要添加任何特殊字符。如果句子模糊或正确，请按我发送的原句输出。"
                 });
                 break;
             case "english":
                 body = JSON.stringify({
-                    question: message + ".Please explain in English whether the sentence is grammatically correct. If it is not correct, please explain in detail why it is incorrect."
+                    question: message + ".If the previous sentence is grammatically incorrect, provide only the correct sentence without any additional explanation or response. Don’t add any special characters before or after it. If it’s ambiguous or correct, output the sentence exactly as I sent it."
                 });
                 break;
             case "french":
                 body = JSON.stringify({
-                    question: message + ".Veuillez vérifier si la phrase est grammaticalement correcte et expliquer en français la phrase que j'ai posée. Si la grammaire n'est pas correcte, veuillez expliquer en détail pourquoi."
+                    question: message + ".Si la phrase précédente est grammaticalement incorrecte, fournissez uniquement la phrase correcte sans aucune explication ou réponse supplémentaire. Ne rajoutez aucun caractère spécial avant ou après. Si la phrase est ambiguë ou correcte, affichez-la exactement telle que je l'ai envoyée."
                 });
                 break;
             case "spanish":
                 body = JSON.stringify({
-                    question: message + ".Verifique si la oración es gramaticalmente correcta y explique en español la oración que he planteado. Si la gramática no es correcta, por favor explique en detalle el motivo."
+                    question: message + ".Si la frase anterior es gramaticalmente incorrecta, proporciona solo la frase correcta sin ninguna explicación o respuesta adicional. No agregues ningún carácter especial antes o después. Si la frase es ambigua o correcta, muestra la frase exactamente como la envié."
                 });
                 break;
             default:
@@ -96,17 +98,11 @@ async function translateMessage(message, roomId, userLanguage) {
         });
 
         const json = await response.json();
-        let messageArea = document.querySelector('.msgArea');
-        let translatedMessageElement = document.createElement('div');
-        translatedMessageElement.classList.add('gptMessage');
-        translatedMessageElement.innerText = json.answer;
-        // let transMsg = {"type": "TALK", "roomId": roomId, "sender": 'GPT', "msg": json.answer}
-        // socket.send(JSON.stringify(transMsg));
-        messageArea.insertAdjacentElement('beforeend', translatedMessageElement);
-        alert('번역 완료했습니다.');
+        return json.answer;
     } catch (error) {
         console.error('Error:', error);
-        alert('번역 실패했습니다.');
+        alert('검사에 실패했습니다.');
+        return message;
     }
 }
 
@@ -166,3 +162,66 @@ async function setRoomHeadCount(roomId, status) {
     };
     await httpRequest('POST', '/chat/setHeadCount', body, success, fail);
 }
+
+async function detectIrrelevantMessage(message, roomId, language, interest) {
+    let isRelevant = false;
+    let body = null;
+    switch (interest) {
+        case 'politics':
+            body = JSON.stringify({
+                question: message + ".If the previous sentence is directly related to economy, society, culture, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+            });
+            break;
+        case 'economy':
+            body = JSON.stringify({
+                question: message + ".If the previous sentence is directly related to politics, society, culture, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+            });
+            break;
+        case 'society':
+            body = JSON.stringify({
+                question: message + ".If the previous sentence is directly related to politics, economy, culture, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+            });
+            break;
+        case 'culture':
+            body = JSON.stringify({
+                question: message + ".If the previous sentence is directly related to politics, economy, society, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+            });
+            break;
+        case 'sports':
+            body = JSON.stringify({
+                question: message + ".If the previous sentence is directly related to politics, economy, society, culture, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+            });
+            break;
+        case 'entertainment':
+            body = JSON.stringify({
+                question: message + ".If the previous sentence is directly related to politics, economy, society, culture, or sports, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+            });
+            break;
+        default:
+            return false;
+    }
+
+
+    try {
+        let response = await fetch('/chat-gpt/question', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+
+        let json = await response.json();
+        console.log(json);
+
+        if (json.answer === "true" || json.answer === "True") {
+            isRelevant = true;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('감지 실패했습니다.');
+    }
+    return isRelevant;
+}
+

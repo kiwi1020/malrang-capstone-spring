@@ -13,6 +13,7 @@ public class UserDto {
         private String email;
         private String nickname;
         private String language;
+        private String interest;
     }
     @Getter
     @AllArgsConstructor
@@ -27,6 +28,7 @@ public class UserDto {
         private String email;
         private String language;
         private double averageRating;
+        private String interest;
     }
 
 }

@@ -35,6 +35,8 @@ public class User implements UserDetails {
     @Column(name = "language")
     private String language;
 
+    @Column(name = "interest")
+    private String interest;
     @Column(name = "average_rating")
     private Double averageRating;
 
@@ -47,13 +49,14 @@ public class User implements UserDetails {
     private ChatRoom chatRoom;
 
     @Builder
-    public User(String email, String password, String nickname, String language, Double averageRating, ChatRoom chatRoom) {
+    public User(String email, String password, String nickname, String language, Double averageRating, ChatRoom chatRoom, String interest) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.language = language;
         this.averageRating = averageRating;
         this.chatRoom = chatRoom;
+        this.interest = interest;
     }
 
     public User update(String nickname) {

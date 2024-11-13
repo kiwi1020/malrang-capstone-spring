@@ -26,7 +26,8 @@ public class ChatController {
         Map<String, Object> response = new HashMap<>();
         response.put("roomId", room.getRoomId());
         response.put("roomName", room.getRoomName());
-
+        response.put("roomLanguageLevel", room.getRoomLanguageLevel());
+        response.put("roomLanguage", room.getRoomLanguage());
         return ResponseEntity.ok(response);
     }
 
