@@ -112,7 +112,7 @@ class UserControllerTest extends TestContainerSupport {
     void updateUserInfo() throws Exception {
         // Given
         final String url = "/user/info/update";
-        UserDto.UpdateUserRequest request = new UserDto.UpdateUserRequest("user@gmail.com","Updated User", "English");
+        UserDto.UpdateUserRequest request = new UserDto.UpdateUserRequest("user@gmail.com","Updated User", "English", "All");
         final String requestBody = objectMapper.writeValueAsString(request);
 
         // When, Then
