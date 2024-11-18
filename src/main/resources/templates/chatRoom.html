@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/css/main.css?dt=20240918"/>
+    <link rel="stylesheet" href="/css/main.css?dt=20241118"/>
 </head>
 <body>
 
@@ -43,6 +43,11 @@
         <button type="button" value="방나가기" class="quit" onclick="quit()">Quit</button>
     </div>
 
+    <label>
+        <input role="switch" type="checkbox" id="autoCorrectSwitch"/>
+        <span id="switchLabel">Auto Grammar Check OFF</span>
+    </label>
+
     <!-- 평가 모달 -->
     <div id="ratingModal" class="rating">
         <div class="rating-content">
@@ -60,15 +65,15 @@
 
 </div>
 
-<script src="/js/userInfo.js?testNm=1"></script>
-<script src="/js/rating.js?testNm=1"></script>
-<script src="/js/chatRoom.js?testNm=1"></script>
-<script src="/js/invite.js?testNm=1" defer></script>
+<script src="/js/userInfo.js?dt=20241118"></script>
+<script src="/js/rating.js?dt=20241118"></script>
+<script src="/js/chatRoom.js?dt=20241118"></script>
+<script src="/js/invite.js?dt=20241118" defer></script>
 
 <script>
     // WebSocket 연결을 위한 변수
-    // let socket = new WebSocket("ws://localhost:8080/ws/chat");
-    let socket = new WebSocket("ws://malrangmalrang.duckdns.org:8080/ws/chat");
+    let socket = new WebSocket("ws://localhost:8080/ws/chat");
+    // let socket = new WebSocket("ws://malrangmalrang.duckdns.org:8080/ws/chat");
     let urlParams = new URLSearchParams(window.location.search);
 
     // WebSocket 연결이 열렸을 때 실행되는 함수
@@ -167,9 +172,15 @@
         let content = document.querySelector('.content').value;
         let user_language = document.getElementById('user_language').innerText;
         let isOffensive = await detectAggressiveMessage(content, urlParams.get('roomId'), user_language);
-        let translatedContent = await translateMessage(content, urlParams.get('roomId'), user_language);
+        let translatedContent = content;
         let isIrrelevant = await detectIrrelevantMessage(translatedContent, urlParams.get('roomId'), user_language, urlParams.get('roomInterest'));
         let talkMsg = null;
+
+        const isTranslateEnabled = document.getElementById('autoCorrectSwitch').checked;
+
+        if (isTranslateEnabled) {
+            translatedContent = await translateMessage(content, urlParams.get('roomId'), user_language);
+        }
 
         if (isOffensive === true) {
             talkMsg = {"type": "TALK", "roomId": urlParams.get('roomId'), "sender": userName, "msg": "*****"};

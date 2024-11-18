@@ -225,3 +225,10 @@ async function detectIrrelevantMessage(message, roomId, language, interest) {
     return isRelevant;
 }
 
+document.getElementById('autoCorrectSwitch').addEventListener('change', function () {
+    const isChecked = this.checked;
+    const label = document.getElementById('switchLabel');
+
+    // 상태에 따라 텍스트 변경
+    label.textContent = isChecked ? "Auto Grammar Check ON" : "Auto Grammar Check OFF";
+});

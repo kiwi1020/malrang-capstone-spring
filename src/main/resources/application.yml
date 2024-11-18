@@ -25,7 +25,7 @@ spring:
     timeout-per-shutdown-phase: 15s
   cloud:
     config:
-      uri: http://54.180.160.232:8888
+      uri: http://13.125.158.167:8888
       request-connect-timeout: 5000 # 5s
       request-read-timeout: 5000 # 5s
       fail-fast: true # In production, set to true
