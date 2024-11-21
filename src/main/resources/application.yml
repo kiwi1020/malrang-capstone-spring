@@ -39,7 +39,6 @@ spring:
     url: ${malrang-service.datasource.url}
     username: ${malrang-service.datasource.username}
     password: ${malrang-service.datasource.password}
-
   data:
     redis:
       port: ${malrang-service.data.redis.port}

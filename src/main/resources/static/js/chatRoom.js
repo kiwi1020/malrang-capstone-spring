@@ -169,32 +169,32 @@ async function detectIrrelevantMessage(message, roomId, language, interest) {
     switch (interest) {
         case 'politics':
             body = JSON.stringify({
-                question: message + ".If the previous sentence is directly related to economy, society, culture, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+                question: message + ".If the previous sentence is directly related to economy, society, culture, sports, or entertainment, respond with 'true.' If it has even a slight connection to politics, respond with 'false.' Please respond with 'true' or 'false' without further explanation.'"
             });
             break;
         case 'economy':
             body = JSON.stringify({
-                question: message + ".If the previous sentence is directly related to politics, society, culture, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+                question: message + ".If the previous sentence is directly related to politics, society, culture, sports, or entertainment, respond with 'true.' If it has even a slight connection to economy, respond with 'false.' Please respond with 'true' or 'false' without further explanation.'"
             });
             break;
         case 'society':
             body = JSON.stringify({
-                question: message + ".If the previous sentence is directly related to politics, economy, culture, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+                question: message + ".If the previous sentence is directly related to politics, economy, culture, sports, or entertainment, respond with 'true.' If it has even a slight connection to society, respond with 'false.' Please respond with 'true' or 'false' without further explanation.'"
             });
             break;
         case 'culture':
             body = JSON.stringify({
-                question: message + ".If the previous sentence is directly related to politics, economy, society, sports, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+                question: message + ".If the previous sentence is directly related to politics, economy, society, sports, or entertainment, respond with 'true.' If it has even a slight connection to culture, respond with 'false.' Please respond with 'true' or 'false' without further explanation.'"
             });
             break;
         case 'sports':
             body = JSON.stringify({
-                question: message + ".If the previous sentence is directly related to politics, economy, society, culture, or entertainment, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+                question: message + ".If the previous sentence is directly related to politics, economy, society, culture, or entertainment, respond with 'true.' If it has even a slight connection to sports, respond with 'false.' Please respond with 'true' or 'false' without further explanation.'"
             });
             break;
         case 'entertainment':
             body = JSON.stringify({
-                question: message + ".If the previous sentence is directly related to politics, economy, society, culture, or sports, respond with 'true.' If it's ambiguous, respond with 'false. Please respond with 'true' or 'false' without further explanation.'"
+                question: message + ".If the previous sentence is directly related to politics, economy, society, culture, or sports, respond with 'true.' If it has even a slight connection to entertainment, respond with 'false.' Please respond with 'true' or 'false' without further explanation.'"
             });
             break;
         default:
